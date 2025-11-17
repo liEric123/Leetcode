@@ -1,0 +1,59 @@
+# Editors / IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.iml
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+env/
+venv/
+.venv/
+.pytest_cache/
+.mypy_cache/
+
+# Java
+*.class
+*.jar
+target/
+out/
+build/
+
+# Node / JS
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnp.*
+
+# C / C++
+*.o
+*.obj
+*.exe
+*.out
+a.out
+cmake-build-*/
+build/
+
+# Rust
+/target/
+
+# General
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.cache
+coverage/
+coverage.xml
+*.zip
+*.tar.gz
+
+# Secrets / env
+.env
+.env.local
