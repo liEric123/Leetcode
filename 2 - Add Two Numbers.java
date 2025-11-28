@@ -1,3 +1,4 @@
+import java.util.Scanner;
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -74,7 +75,7 @@ class Solution {
         return answer.next;
     }
     public static void main(String[] args) {
-        java.util.Scanner sc = new java.util.Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         Solution s = new Solution();
 
         System.out.println("Enter digits for list 1 (space-separated):");
