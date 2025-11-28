@@ -21,6 +21,8 @@ public:
     };
 
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        // Time Complexity: O(max(M, N)) because we iterate over both lists at the same time.
+        // Space Complexity O(max(M, N)) for the answer List.
         ListNode* point1 = l1;
         ListNode* point2 = l2;
 
