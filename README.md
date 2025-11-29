@@ -1,6 +1,6 @@
 # Eric's LeetCode Solutions :)
 
-How to Compile and Run the Solutions:
+## How to Compile and Run the Solutions:
 
 - C++:
 
@@ -15,6 +15,6 @@ Requirements: JDK and VSCode extension
 
 To Compile file: javac "[file name]".java
 
-To Run the program: java "[file name]"
+To Run the program: java "[file name]"  
 
-I've also included tester programs (AI-generated) for that allow users to pass input directly through the terminal for easier debugging and interactive testing.
+#### I've also included tester programs (AI-generated) for that allow users to pass input directly through the terminal for easier debugging and interactive testing.
