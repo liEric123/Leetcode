@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[Problem Name] Visualizer - LeetCode #[Number]</title>
+    <!-- Link shared stylesheet -->
+    <link rel="stylesheet" href="visualizer-template.css">
+    <style>
+        /* ==================== PROBLEM-SPECIFIC STYLES ==================== */
+        /* Add any custom styles specific to this problem here */
+
+        /* Example: Custom array item styling */
+        .array-item {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 3px solid #cbd5e0;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            color: #1a202c;
+        }
+
+        body.dark-mode .array-item {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .array-item .index {
+            position: absolute;
+            top: -22px;
+            font-size: 11px;
+            color: #a0aec0;
+            font-weight: 600;
+            background: #f7fafc;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .array-item.current {
+            border-color: #4299e1;
+            background: #ebf8ff;
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+        }
+
+        .array-item.found {
+            border-color: #48bb78;
+            background: #48bb78;
+            color: white;
+            transform: scale(1.12);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+        }
+
+        .array-item.processed {
+            border-color: #48bb78;
+            background: #c6f6d5;
+        }
+
+        .array-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            min-height: 96px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .array-container {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Dark Mode Toggle (required) -->
+        <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
+
+        <!-- Title and Subtitle -->
+        <h1>[Icon] [Problem Name] Visualizer</h1>
+        <p class="subtitle">LeetCode #[Number] - [Brief Description]</p>
+
+        <!-- Input Limit Modal (required) -->
+        <div class="modal-overlay" id="inputModal">
+            <div class="modal">
+                <h2>⚠️ Input Too Large</h2>
+                <p id="modalMessage"></p>
+                <div class="modal-buttons">
+                    <button class="primary" id="modalReduceBtn">Reduce Input</button>
+                    <button class="secondary" id="modalStatsBtn">Show Stats Only</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YouTube Video Section (optional but recommended) -->
+        <div class="video-section">
+            <div class="video-header">
+                <div class="video-title">📺 Solution Walkthrough Video</div>
+                <button class="toggle-btn" id="videoToggle">−</button>
+            </div>
+            <div class="video-content" id="videoContent">
+                <div class="video-container">
+                    <!-- Replace YOUR_VIDEO_ID with your actual YouTube video ID -->
+                    <iframe id="videoFrame"
+                        src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="timestamps-section">
+                    <div class="timestamps-label">⏱ Quick Links</div>
+                    <div class="timestamps-list" id="timestampsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Visualizer Section -->
+        <div class="visualizer-section">
+            <div class="visualizer-header">
+                <h2>Interactive [Problem Name] Visualizer</h2>
+                <p>Step through the algorithm and see how it works in real-time</p>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="controls-row">
+                    <div class="input-group">
+                        <label>Array</label>
+                        <input type="text" id="arrayInput" value="2,7,11,15" placeholder="e.g., 2,7,11,15">
+                    </div>
+                    <div class="input-group">
+                        <label>Target</label>
+                        <input type="number" id="targetInput" value="9" placeholder="e.g., 9">
+                    </div>
+                    <div class="speed-control">
+                        <label>Animation Speed</label>
+                        <div class="slider-container">
+                            <input type="range" id="speedSlider" min="1" max="20" value="3">
+                            <span class="speed-value" id="speedValue">0.3x</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls-row">
+                    <div class="button-group">
+                        <button id="playBtn">▶ Play</button>
+                        <button id="pauseBtn" class="secondary" disabled>⏸ Pause</button>
+                        <button id="stepBtn" class="tertiary">⏭ Step</button>
+                        <button id="resetBtn" class="outline">↻ Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">Input Size</div>
+                    <div class="stat-value" id="inputSize">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Operations</div>
+                    <div class="stat-value" id="operations">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Time Complexity</div>
+                    <div class="stat-value">O(n)</div>
+                </div>
+            </div>
+
+            <!-- Visualization Area -->
+            <div class="array-container" id="arrayContainer"></div>
+
+            <!-- Code Panel -->
+            <div class="code-header">
+                <span class="code-title">Code</span>
+                <div class="lang-toggle">
+                    <button class="lang-btn active" data-lang="cpp">C++</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                </div>
+            </div>
+
+            <div class="code-panel" id="codePanelCpp">
+                <div class="code-line" data-line="1"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); i++) {</div>
+                <div class="code-line" data-line="2">&nbsp;&nbsp;<span class="comment">// Your code here</span></div>
+                <div class="code-line" data-line="3">}</div>
+            </div>
+
+            <div class="code-panel" id="codePanelJava" style="display: none;">
+                <div class="code-line" data-line="1"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) {</div>
+                <div class="code-line" data-line="2">&nbsp;&nbsp;<span class="comment">// Your code here</span></div>
+                <div class="code-line" data-line="3">}</div>
+            </div>
+
+            <div class="step-info" id="stepInfo">Ready to start</div>
+        </div>
+    </div>
+
+    <!-- Problem-specific JavaScript -->
+    <script>
+        /* ==================== CONFIGURATION ==================== */
+        const PROBLEM_NAME = 'yourProblem'; // Change this to your problem name (e.g., 'twoSum', 'addTwoNumbers')
+    </script>
+
+    <!-- Load shared JavaScript -->
+    <script src="visualizer-template.js"></script>
+
+    <script>
+
+        /* ==================== STATE ==================== */
+        let nums = [];
+        let target = 0;
+        let animationController;
+
+        /* ==================== ELEMENTS ==================== */
+        const arrayInput = document.getElementById('arrayInput');
+        const targetInput = document.getElementById('targetInput');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stepBtn = document.getElementById('stepBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const arrayContainer = document.getElementById('arrayContainer');
+
+        /* ==================== INITIALIZE ==================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            initVisualizer(); // Initialize shared functionality
+
+            // Create animation controller
+            animationController = new AnimationController(speedController);
+
+            // Setup stats callback for large inputs
+            inputValidator.setStatsCallback(runStatsOnly);
+
+            // Initialize display
+            const initNums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
+            createArrayDisplay(initNums);
+        });
+
+        /* ==================== VISUALIZATION FUNCTIONS ==================== */
+
+        function createArrayDisplay(values) {
+            arrayContainer.innerHTML = '';
+            values.forEach((val, idx) => {
+                const item = document.createElement('div');
+                item.className = 'array-item';
+                item.innerHTML = `<span class="index">${idx}</span>${val}`;
+                item.id = `array-${idx}`;
+                arrayContainer.appendChild(item);
+            });
+
+            if (values.length === 0) {
+                arrayContainer.innerHTML = '<div style="color: #a0aec0; font-style: italic;">Empty</div>';
+            }
+        }
+
+        /* ==================== ALGORITHM GENERATOR ==================== */
+
+        function* algorithmGenerator() {
+            // Initialize
+            codeHighlighter.highlightCode('codePanel', 1);
+            uiUpdater.updateStepInfo('stepInfo', 'Starting algorithm...');
+            yield;
+
+            // Main algorithm loop
+            for (let i = 0; i < nums.length; i++) {
+                codeHighlighter.highlightCode('codePanel', 2);
+                document.getElementById(`array-${i}`).classList.add('current');
+                uiUpdater.updateStepInfo('stepInfo', `Processing index ${i}, value = ${nums[i]}`);
+                uiUpdater.updateStat('operations', i + 1);
+                yield;
+
+                // Your algorithm logic here
+                // ...
+
+                document.getElementById(`array-${i}`).classList.remove('current');
+                document.getElementById(`array-${i}`).classList.add('processed');
+                yield;
+            }
+
+            // Complete
+            codeHighlighter.highlightCode('codePanel', 3);
+            uiUpdater.updateStepInfo('stepInfo', 'Algorithm complete!');
+            yield;
+        }
+
+        /* ==================== STATS ONLY MODE ==================== */
+
+        async function runStatsOnly() {
+            nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
+            target = parseInt(targetInput.value);
+
+            // Disable buttons
+            playBtn.disabled = true;
+            pauseBtn.disabled = true;
+
+            // Run algorithm without visualization
+            let operations = 0;
+            for (let i = 0; i < nums.length; i++) {
+                operations++;
+                // Your algorithm logic here
+            }
+
+            // Display stats
+            const statsHtml = `
+                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 8px;">
+                    <h3 style="color: #166534; margin-bottom: 12px;">📊 Algorithm Statistics</h3>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Input size:</strong> ${nums.length} items</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Operations:</strong> ${operations}</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Time complexity:</strong> O(n)</p>
+                </div>
+            `;
+            uiUpdater.updateStepInfo('stepInfo', '');
+            document.getElementById('stepInfo').innerHTML = statsHtml;
+
+            // Re-enable buttons
+            playBtn.disabled = false;
+        }
+
+        /* ==================== BUTTON HANDLERS ==================== */
+
+        playBtn.addEventListener('click', async () => {
+            if (animationController.isRunning && animationController.isPaused) {
+                // Resume
+                animationController.resume();
+                playBtn.disabled = true;
+                pauseBtn.disabled = false;
+                stepBtn.disabled = true;
+                await animationController.continue();
+            } else if (!animationController.isRunning) {
+                // Start new
+                const validation = inputValidator.validateArray(arrayInput.value);
+                if (!validation.valid) return;
+
+                nums = validation.data;
+                target = parseInt(targetInput.value);
+
+                playBtn.disabled = true;
+                pauseBtn.disabled = false;
+                stepBtn.disabled = true;
+
+                createArrayDisplay(nums);
+                uiUpdater.updateStat('inputSize', nums.length);
+                uiUpdater.updateStat('operations', 0);
+
+                await animationController.start(algorithmGenerator, false);
+
+                // Animation complete
+                playBtn.disabled = true;
+                pauseBtn.disabled = true;
+                stepBtn.disabled = true;
+            }
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            animationController.pause();
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stepBtn.disabled = false;
+        });
+
+        stepBtn.addEventListener('click', async () => {
+            if (!animationController.isRunning) {
+                // Start in step mode
+                const validation = inputValidator.validateArray(arrayInput.value);
+                if (!validation.valid) return;
+
+                nums = validation.data;
+                target = parseInt(targetInput.value);
+
+                playBtn.disabled = false;
+                pauseBtn.disabled = true;
+                stepBtn.disabled = false;
+
+                createArrayDisplay(nums);
+                uiUpdater.updateStat('inputSize', nums.length);
+                uiUpdater.updateStat('operations', 0);
+
+                await animationController.start(algorithmGenerator, true);
+            } else {
+                // Execute one step
+                const complete = await animationController.step();
+                if (complete) {
+                    playBtn.disabled = true;
+                    pauseBtn.disabled = true;
+                    stepBtn.disabled = true;
+                }
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            location.reload();
+        });
+    </script>
+</body>
+</html>

@@ -3,243 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two Sum Visualizer</title>
+    <title>Two Sum Visualizer - LeetCode #1</title>
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="visualizer-template.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ==================== PROBLEM-SPECIFIC STYLES ==================== */
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
+        /* Container adjustment for side-by-side view */
         .container {
             max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        h1 {
-            text-align: center;
-            color: #1a202c;
-            margin-bottom: 8px;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #718096;
-            margin-bottom: 35px;
-            font-size: 16px;
-        }
-
-        .controls {
-            background: #f7fafc;
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
-
-        .controls-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .input-group label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #4a5568;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input[type="text"],
-        input[type="number"] {
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.2s;
-            background: white;
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            min-width: 180px;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 12px;
-        }
-
-        button {
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            height: 44px;
-            white-space: nowrap;
-        }
-
-        button:hover:not(:disabled) {
-            background: #5568d3;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            background: #cbd5e0;
-            cursor: not-allowed;
-            transform: none;
-            opacity: 0.6;
-        }
-
-        button.secondary {
-            background: #48bb78;
-        }
-
-        button.secondary:hover:not(:disabled) {
-            background: #38a169;
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
-        }
-
-        button.tertiary {
-            background: #ed8936;
-        }
-
-        button.tertiary:hover:not(:disabled) {
-            background: #dd6b20;
-            box-shadow: 0 4px 12px rgba(237, 137, 54, 0.4);
-        }
-
-        button.outline {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        button.outline:hover:not(:disabled) {
-            background: #667eea;
-            color: white;
-        }
-
-        .speed-control {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 220px;
-        }
-
-        .speed-control label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #4a5568;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: #e2e8f0;
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #667eea;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #667eea;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
-        }
-
-        .speed-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #667eea;
-            min-width: 45px;
-            text-align: center;
-            background: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 2px solid #667eea;
-        }
-
+        /* View controls */
         .view-controls {
             display: flex;
             gap: 12px;
@@ -258,12 +33,14 @@
             color: white;
         }
 
+        /* Algorithms grid */
         .algorithms {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 24px;
             margin-bottom: 30px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: start;
         }
 
         .algorithms.focus-brute {
@@ -275,23 +52,26 @@
         }
 
         .algorithm {
-            border: 3px solid transparent;
+            border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 24px;
-            background: #fafafa;
+            background: #fafbfc;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
+        body.dark-mode .algorithm {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
         .algorithm.brute-force {
-            border-color: #fc8181;
-            background: linear-gradient(135deg, #fff5f5 0%, #fafafa 100%);
+            border-left: 3px solid #dc2626;
         }
 
         .algorithm.hash-map {
-            border-color: #4299e1;
-            background: linear-gradient(135deg, #ebf8ff 0%, #fafafa 100%);
+            border-left: 3px solid #2563eb;
         }
 
         .algorithms.focus-brute .algorithm.hash-map,
@@ -302,50 +82,69 @@
         }
 
         .algorithm h2 {
-            color: #1a202c;
-            margin-bottom: 16px;
-            font-size: 20px;
-            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 18px;
+            font-size: 18px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: -0.3px;
         }
 
-        .algorithm.brute-force h2 {
-            color: #c53030;
+        body.dark-mode .algorithm h2 {
+            color: #e2e8f0;
         }
 
-        .algorithm.hash-map h2 {
-            color: #2c5282;
+        .algorithm h2 .complexity {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: auto;
         }
 
         .algorithm-controls {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
-            padding: 12px;
+            margin-bottom: 20px;
+            padding: 10px;
             background: white;
             border-radius: 8px;
-            border: 2px solid #e2e8f0;
+            border: 1px solid #e2e8f0;
             flex-wrap: wrap;
+            height: 56px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .algorithm-controls {
+            background: #1a202c;
+            border-color: #4a5568;
         }
 
         .algorithm-controls button {
-            padding: 8px 16px;
+            padding: 8px 14px;
             font-size: 13px;
-            height: 36px;
+            height: 34px;
         }
 
         .array-container {
             display: flex;
             gap: 10px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            min-height: 80px;
+            min-height: 96px;
             padding: 16px;
             background: white;
             border-radius: 8px;
-            border: 2px solid #e2e8f0;
+            border: 1px solid #e2e8f0;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .array-container {
+            background: #1a202c;
+            border-color: #4a5568;
         }
 
         .array-item {
@@ -363,6 +162,13 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            color: #1a202c;
+        }
+
+        body.dark-mode .array-item {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #e2e8f0;
         }
 
         .array-item .index {
@@ -398,22 +204,33 @@
             box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
         }
 
-        .hash-map {
+        .hash-map-display {
             background: white;
-            border: 2px solid #e2e8f0;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 16px;
-            min-height: 130px;
+            height: 130px;
             margin-bottom: 20px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
         }
 
-        .hash-map h3 {
-            font-size: 13px;
-            color: #718096;
+        body.dark-mode .hash-map-display {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+
+        .hash-map-display h3 {
+            font-size: 12px;
+            color: #64748b;
             margin-bottom: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        body.dark-mode .hash-map-display h3 {
+            color: #a0aec0;
         }
 
         .hash-entries {
@@ -449,97 +266,28 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat {
-            background: white;
-            padding: 14px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
         }
 
         .algorithm.brute-force .stat {
-            border-left-color: #fc8181;
+            border-left-color: #dc2626;
         }
 
         .algorithm.hash-map .stat {
-            border-left-color: #4299e1;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: #718096;
-            margin-bottom: 6px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a202c;
-            font-family: 'SF Mono', Monaco, monospace;
-        }
-
-        .code-panel {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 8px;
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.8;
-            overflow-x: auto;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .code-line {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin: 2px 0;
-        }
-
-        .code-line.active {
-            background: #2d3748;
-            border-left: 4px solid #4299e1;
-            padding-left: 12px;
-            transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
-        }
-
-        .keyword {
-            color: #fc8181;
-        }
-
-        .function {
-            color: #68d391;
-        }
-
-        .number {
-            color: #f6ad55;
-        }
-
-        .comment {
-            color: #a0aec0;
-            font-style: italic;
+            border-left-color: #2563eb;
         }
 
         .result {
             text-align: center;
-            padding: 24px;
-            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
-            border: 2px solid #48bb78;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #22543d;
-            margin-top: 20px;
+            padding: 20px;
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #166534;
+            margin-top: 24px;
             display: none;
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.2);
         }
 
         .result.show {
@@ -547,59 +295,76 @@
             animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .step-info {
-            background: #edf2f7;
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-            border-left: 4px solid #667eea;
-            font-size: 14px;
-            color: #2d3748;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-        }
-
         .algorithm.brute-force .step-info {
-            border-left-color: #fc8181;
-            background: #fff5f5;
+            border-left: 2px solid #dc2626;
         }
 
         .algorithm.hash-map .step-info {
-            border-left-color: #4299e1;
-            background: #ebf8ff;
+            border-left: 2px solid #2563eb;
         }
 
         @media (max-width: 1000px) {
             .algorithms {
                 grid-template-columns: 1fr;
             }
-            
+
             .algorithms.focus-brute,
             .algorithms.focus-hash {
                 grid-template-columns: 1fr;
             }
-            
+
             .algorithms.focus-brute .algorithm.hash-map,
             .algorithms.focus-hash .algorithm.brute-force {
                 display: none;
-            }
-            
-            .controls-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .button-group {
-                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎯 Two Sum Visualizer</h1>
-        <p class="subtitle">Watch two algorithms solve the same problem - control each independently</p>
+        <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
+        <h1>Two Sum Algorithm Visualizer</h1>
+        <p class="subtitle">Compare brute force and hash map approaches side by side</p>
+
+        <!-- Input Limit Modal -->
+        <div class="modal-overlay" id="inputModal">
+            <div class="modal">
+                <h2>⚠️ Input Too Large</h2>
+                <p id="modalMessage"></p>
+                <div class="modal-buttons">
+                    <button class="primary" id="modalReduceBtn">Reduce Input</button>
+                    <button class="secondary" id="modalStatsBtn">Show Stats Only</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YouTube Video Section -->
+        <div class="video-section">
+            <div class="video-header">
+                <div class="video-title">📺 Solution Walkthrough Video</div>
+                <button class="toggle-btn" id="videoToggle">−</button>
+            </div>
+            <div class="video-content" id="videoContent">
+                <div class="video-container">
+                    <iframe id="videoFrame"
+                        src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="timestamps-section">
+                    <div class="timestamps-label">⏱ Quick Links</div>
+                    <div class="timestamps-list" id="timestampsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Visualizer Section -->
+        <div class="visualizer-section">
+            <div class="visualizer-header">
+                <h2>Interactive Two Sum Visualizer</h2>
+                <p>Step through the algorithms and see how they work in real-time</p>
+            </div>
 
         <div class="controls">
             <div class="controls-row">
@@ -621,30 +386,31 @@
             </div>
             <div class="controls-row">
                 <div class="button-group">
-                    <button id="playBothBtn">▶▶ Play Both</button>
-                    <button id="pauseBothBtn" class="secondary" disabled>⏸⏸ Pause Both</button>
-                    <button id="resetBtn" class="outline">↻ Reset All</button>
+                    <button id="playBothBtn">Play Both</button>
+                    <button id="pauseBothBtn" class="secondary" disabled>Pause Both</button>
+                    <button id="resetBtn" class="outline">Reset All</button>
                 </div>
             </div>
         </div>
 
         <div class="view-controls">
-            <button id="viewBothBtn" class="outline active">👁️ View Both</button>
-            <button id="viewBruteBtn" class="outline">🔍 Focus Brute Force</button>
-            <button id="viewHashBtn" class="outline">🔍 Focus Hash Map</button>
+            <button id="viewBothBtn" class="outline active">View Both</button>
+            <button id="viewBruteBtn" class="outline">Focus Brute Force</button>
+            <button id="viewHashBtn" class="outline">Focus Hash Map</button>
         </div>
 
         <div class="algorithms" id="algorithmsContainer">
             <!-- Brute Force -->
             <div class="algorithm brute-force">
-                <h2><span>🐌</span> Brute Force O(n²)</h2>
+                <h2>Brute Force <span class="complexity">O(n²)</span></h2>
                 <div class="algorithm-controls">
-                    <button id="brutePlayBtn">▶ Play</button>
-                    <button id="brutePauseBtn" class="secondary" disabled>⏸ Pause</button>
-                    <button id="bruteStepBtn" class="tertiary">⏭ Step</button>
-                    <button id="bruteResetBtn" class="outline">↻ Reset</button>
+                    <button id="brutePlayBtn">Play</button>
+                    <button id="brutePauseBtn" class="secondary" disabled>Pause</button>
+                    <button id="bruteStepBtn" class="tertiary">Step</button>
+                    <button id="bruteResetBtn" class="outline">Reset</button>
                 </div>
                 <div class="array-container" id="bruteArray"></div>
+                <div class="hash-map-display" style="visibility: hidden;"></div>
                 <div class="stats">
                     <div class="stat">
                         <div class="stat-label">Comparisons</div>
@@ -655,28 +421,45 @@
                         <div class="stat-value">O(n²)</div>
                     </div>
                 </div>
-                <div class="code-panel" id="bruteCode">
-                    <div class="code-line" data-line="1"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</div>
-                    <div class="code-line" data-line="2">&nbsp;&nbsp;<span class="keyword">for</span> (j = i+<span class="number">1</span>; j &lt; n; j++) {</div>
-                    <div class="code-line" data-line="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (nums[i] + nums[j] == target)</div>
-                    <div class="code-line" data-line="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> [i, j];</div>
-                    <div class="code-line" data-line="5">&nbsp;&nbsp;}</div>
-                    <div class="code-line" data-line="6">}</div>
+                <div class="code-header">
+                    <span class="code-title">Code</span>
+                    <div class="lang-toggle">
+                        <button class="lang-btn active" data-lang="cpp" data-algo="brute">C++</button>
+                        <button class="lang-btn" data-lang="java" data-algo="brute">Java</button>
+                    </div>
+                </div>
+                <div class="code-panel" id="bruteCodeCpp">
+                    <div class="code-line" data-line="1"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="keyword">0</span>; i &lt; nums.size(); i++) {</div>
+                    <div class="code-line" data-line="2">&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="keyword">1</span>; j &lt; nums.size(); j++) {</div>
+                    <div class="code-line" data-line="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (nums[i] + nums[j] == target) {</div>
+                    <div class="code-line" data-line="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> {i, j};</div>
+                    <div class="code-line" data-line="5">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                    <div class="code-line" data-line="6">&nbsp;&nbsp;}</div>
+                    <div class="code-line" data-line="7">}</div>
+                </div>
+                <div class="code-panel" id="bruteCodeJava" style="display: none;">
+                    <div class="code-line" data-line="1"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="keyword">0</span>; i &lt; nums.length; i++) {</div>
+                    <div class="code-line" data-line="2">&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="keyword">1</span>; j &lt; nums.length; j++) {</div>
+                    <div class="code-line" data-line="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (nums[i] + nums[j] == target) {</div>
+                    <div class="code-line" data-line="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return new int</span>[] {i, j};</div>
+                    <div class="code-line" data-line="5">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                    <div class="code-line" data-line="6">&nbsp;&nbsp;}</div>
+                    <div class="code-line" data-line="7">}</div>
                 </div>
                 <div class="step-info" id="bruteStep">Ready to start</div>
             </div>
 
             <!-- Hash Map -->
             <div class="algorithm hash-map">
-                <h2><span>⚡</span> Hash Map O(n)</h2>
+                <h2>Hash Map <span class="complexity">O(n)</span></h2>
                 <div class="algorithm-controls">
-                    <button id="hashPlayBtn">▶ Play</button>
-                    <button id="hashPauseBtn" class="secondary" disabled>⏸ Pause</button>
-                    <button id="hashStepBtn" class="tertiary">⏭ Step</button>
-                    <button id="hashResetBtn" class="outline">↻ Reset</button>
+                    <button id="hashPlayBtn">Play</button>
+                    <button id="hashPauseBtn" class="secondary" disabled>Pause</button>
+                    <button id="hashStepBtn" class="tertiary">Step</button>
+                    <button id="hashResetBtn" class="outline">Reset</button>
                 </div>
                 <div class="array-container" id="hashArray"></div>
-                <div class="hash-map">
+                <div class="hash-map-display">
                     <h3>Hash Map Contents</h3>
                     <div class="hash-entries" id="hashEntries"></div>
                 </div>
@@ -690,13 +473,29 @@
                         <div class="stat-value">O(n)</div>
                     </div>
                 </div>
-                <div class="code-panel" id="hashCode">
-                    <div class="code-line" data-line="1">map = {};</div>
-                    <div class="code-line" data-line="2"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</div>
-                    <div class="code-line" data-line="3">&nbsp;&nbsp;complement = target - nums[i];</div>
-                    <div class="code-line" data-line="4">&nbsp;&nbsp;<span class="keyword">if</span> (complement <span class="keyword">in</span> map)</div>
-                    <div class="code-line" data-line="5">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> [map[complement], i];</div>
+                <div class="code-header">
+                    <span class="code-title">Code</span>
+                    <div class="lang-toggle">
+                        <button class="lang-btn active" data-lang="cpp" data-algo="hash">C++</button>
+                        <button class="lang-btn" data-lang="java" data-algo="hash">Java</button>
+                    </div>
+                </div>
+                <div class="code-panel" id="hashCodeCpp">
+                    <div class="code-line" data-line="1">unordered_map&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; map;</div>
+                    <div class="code-line" data-line="2"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="keyword">0</span>; i &lt; nums.size(); i++) {</div>
+                    <div class="code-line" data-line="3">&nbsp;&nbsp;<span class="keyword">if</span> (map.find(target - nums[i]) != map.end()) {</div>
+                    <div class="code-line" data-line="4">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> {i, map[target - nums[i]]};</div>
+                    <div class="code-line" data-line="5">&nbsp;&nbsp;}</div>
                     <div class="code-line" data-line="6">&nbsp;&nbsp;map[nums[i]] = i;</div>
+                    <div class="code-line" data-line="7">}</div>
+                </div>
+                <div class="code-panel" id="hashCodeJava" style="display: none;">
+                    <div class="code-line" data-line="1">HashMap&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</div>
+                    <div class="code-line" data-line="2"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="keyword">0</span>; i &lt; nums.length; i++) {</div>
+                    <div class="code-line" data-line="3">&nbsp;&nbsp;<span class="keyword">if</span> (map.containsKey(target - nums[i])) {</div>
+                    <div class="code-line" data-line="4">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return new int</span>[] {map.get(target - nums[i]), i};</div>
+                    <div class="code-line" data-line="5">&nbsp;&nbsp;}</div>
+                    <div class="code-line" data-line="6">&nbsp;&nbsp;map.put(nums[i], i);</div>
                     <div class="code-line" data-line="7">}</div>
                 </div>
                 <div class="step-info" id="hashStep">Ready to start</div>
@@ -704,36 +503,32 @@
         </div>
 
         <div class="result" id="result"></div>
+        </div>
     </div>
 
+    <!-- Problem-specific JavaScript -->
     <script>
-        let speed = 0.3;
+        const PROBLEM_NAME = 'twoSum';
+    </script>
+
+    <!-- Shared JavaScript -->
+    <script src="visualizer-template.js"></script>
+
+    <script>
+
+        // State
         let nums = [];
         let target = 0;
-
-        // Brute force state
-        let bruteRunning = false;
-        let brutePaused = false;
-        let bruteGenerator = null;
-        let bruteStepMode = false;
-
-        // Hash map state
-        let hashRunning = false;
-        let hashPaused = false;
-        let hashGenerator = null;
-        let hashStepMode = false;
+        let bruteAnimController;
+        let hashAnimController;
 
         // Elements
         const arrayInput = document.getElementById('arrayInput');
         const targetInput = document.getElementById('targetInput');
-        const speedSlider = document.getElementById('speedSlider');
-        const speedValue = document.getElementById('speedValue');
-        const resetBtn = document.getElementById('resetBtn');
         const playBothBtn = document.getElementById('playBothBtn');
         const pauseBothBtn = document.getElementById('pauseBothBtn');
+        const resetBtn = document.getElementById('resetBtn');
         const result = document.getElementById('result');
-
-        // View controls
         const viewBothBtn = document.getElementById('viewBothBtn');
         const viewBruteBtn = document.getElementById('viewBruteBtn');
         const viewHashBtn = document.getElementById('viewHashBtn');
@@ -751,12 +546,205 @@
         const hashStepBtn = document.getElementById('hashStepBtn');
         const hashResetBtn = document.getElementById('hashResetBtn');
 
-        // Speed control
-        speedSlider.addEventListener('input', (e) => {
-            const val = parseInt(e.target.value);
-            speed = val / 10;
-            speedValue.textContent = speed.toFixed(1) + 'x';
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            initVisualizer();
+
+            bruteAnimController = new AnimationController(speedController);
+            hashAnimController = new AnimationController(speedController);
+
+            inputValidator.setStatsCallback(runStatsOnly);
+
+            // Initialize display
+            const initNums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
+            createArrayDisplay('bruteArray', initNums);
+            createArrayDisplay('hashArray', initNums);
         });
+
+        // Visualization functions
+        function createArrayDisplay(containerId, values) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            values.forEach((val, idx) => {
+                const item = document.createElement('div');
+                item.className = 'array-item';
+                item.innerHTML = `<span class="index">${idx}</span>${val}`;
+                item.id = `${containerId}-${idx}`;
+                container.appendChild(item);
+            });
+        }
+
+        // Brute force generator
+        function* bruteForceGenerator() {
+            let comparisons = 0;
+            const compEl = document.getElementById('bruteComparisons');
+
+            codeHighlighter.highlightCode('bruteCode', 1);
+            uiUpdater.updateStepInfo('bruteStep', 'Starting outer loop');
+            yield;
+
+            for (let i = 0; i < nums.length; i++) {
+                codeHighlighter.highlightCode('bruteCode', 1);
+                document.getElementById(`bruteArray-${i}`).classList.add('current');
+                uiUpdater.updateStepInfo('bruteStep', `Outer loop: i=${i}, nums[${i}]=${nums[i]}`);
+                yield;
+
+                for (let j = i + 1; j < nums.length; j++) {
+                    codeHighlighter.highlightCode('bruteCode', 2);
+                    document.getElementById(`bruteArray-${j}`).classList.add('checking');
+                    uiUpdater.updateStepInfo('bruteStep', `Inner loop: j=${j}, checking ${nums[i]} + ${nums[j]}`);
+                    yield;
+
+                    codeHighlighter.highlightCode('bruteCode', 3);
+                    comparisons++;
+                    compEl.textContent = comparisons;
+                    const sum = nums[i] + nums[j];
+                    uiUpdater.updateStepInfo('bruteStep', `Comparing: ${nums[i]} + ${nums[j]} = ${sum} vs target ${target}`);
+                    yield;
+
+                    if (nums[i] + nums[j] === target) {
+                        codeHighlighter.highlightCode('bruteCode', 4);
+                        document.getElementById(`bruteArray-${i}`).classList.add('found');
+                        document.getElementById(`bruteArray-${j}`).classList.add('found');
+                        uiUpdater.updateStepInfo('bruteStep', `Found! Returning [${i}, ${j}]`);
+                        showResult('Brute Force', i, j);
+                        yield;
+                        return;
+                    }
+
+                    document.getElementById(`bruteArray-${j}`).classList.remove('checking');
+                    uiUpdater.updateStepInfo('bruteStep', `No match, continuing...`);
+                    yield;
+                }
+
+                codeHighlighter.highlightCode('bruteCode', 5);
+                document.getElementById(`bruteArray-${i}`).classList.remove('current');
+                uiUpdater.updateStepInfo('bruteStep', `Finished inner loop for i=${i}`);
+                yield;
+            }
+
+            codeHighlighter.highlightCode('bruteCode', 6);
+            uiUpdater.updateStepInfo('bruteStep', 'Algorithm complete - no solution found');
+        }
+
+        // Hash map generator
+        function* hashMapGenerator() {
+            const hashMap = new Map();
+            const entriesContainer = document.getElementById('hashEntries');
+            let lookups = 0;
+            const lookupsEl = document.getElementById('hashLookups');
+
+            codeHighlighter.highlightCode('hashCode', 1);
+            uiUpdater.updateStepInfo('hashStep', 'Initializing empty hash map');
+            yield;
+
+            for (let i = 0; i < nums.length; i++) {
+                codeHighlighter.highlightCode('hashCode', 2);
+                document.getElementById(`hashArray-${i}`).classList.add('current');
+                uiUpdater.updateStepInfo('hashStep', `Processing index ${i}, value = ${nums[i]}`);
+                yield;
+
+                codeHighlighter.highlightCode('hashCode', 3);
+                const complement = target - nums[i];
+                uiUpdater.updateStepInfo('hashStep', `Calculating complement: ${target} - ${nums[i]} = ${complement}`);
+                yield;
+
+                codeHighlighter.highlightCode('hashCode', 4);
+                lookups++;
+                lookupsEl.textContent = lookups;
+                uiUpdater.updateStepInfo('hashStep', `Looking up ${complement} in hash map...`);
+                yield;
+
+                if (hashMap.has(complement)) {
+                    codeHighlighter.highlightCode('hashCode', 5);
+                    const j = hashMap.get(complement);
+                    document.getElementById(`hashArray-${i}`).classList.add('found');
+                    document.getElementById(`hashArray-${j}`).classList.add('found');
+                    uiUpdater.updateStepInfo('hashStep', `Found! ${complement} exists at index ${j}`);
+                    showResult('Hash Map', j, i);
+                    yield;
+                    return;
+                }
+
+                uiUpdater.updateStepInfo('hashStep', `${complement} not in map, adding ${nums[i]} → ${i}`);
+                yield;
+
+                codeHighlighter.highlightCode('hashCode', 6);
+                hashMap.set(nums[i], i);
+
+                const entry = document.createElement('div');
+                entry.className = 'hash-entry';
+                entry.textContent = `${nums[i]} → ${i}`;
+                entriesContainer.appendChild(entry);
+
+                uiUpdater.updateStepInfo('hashStep', `Added ${nums[i]} → ${i} to hash map`);
+                yield;
+
+                document.getElementById(`hashArray-${i}`).classList.remove('current');
+                yield;
+            }
+
+            codeHighlighter.highlightCode('hashCode', 7);
+            uiUpdater.updateStepInfo('hashStep', 'Algorithm complete - no solution found');
+        }
+
+        function showResult(algorithm, i, j) {
+            result.innerHTML = `<strong>${algorithm}</strong> found solution: indices [${i}, ${j}] → ${nums[i]} + ${nums[j]} = ${target}`;
+            result.classList.add('show');
+        }
+
+        // Stats only mode
+        async function runStatsOnly() {
+            nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
+            target = parseInt(targetInput.value);
+
+            playBothBtn.disabled = true;
+            pauseBothBtn.disabled = true;
+            result.classList.remove('show');
+
+            // Run brute force stats
+            let bruteComparisons = 0;
+            let bruteResult = null;
+            for (let i = 0; i < nums.length; i++) {
+                for (let j = i + 1; j < nums.length; j++) {
+                    bruteComparisons++;
+                    if (nums[i] + nums[j] === target) {
+                        bruteResult = [i, j];
+                        break;
+                    }
+                }
+                if (bruteResult) break;
+            }
+
+            // Run hash map stats
+            let hashLookups = 0;
+            let hashResult = null;
+            const hashMap = new Map();
+            for (let i = 0; i < nums.length; i++) {
+                hashLookups++;
+                if (hashMap.has(target - nums[i])) {
+                    hashResult = [hashMap.get(target - nums[i]), i];
+                    break;
+                }
+                hashMap.set(nums[i], i);
+            }
+
+            // Display results
+            const statsHtml = `
+                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 8px;">
+                    <h3 style="color: #166534; margin-bottom: 12px;">📊 Algorithm Statistics</h3>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Input size:</strong> ${nums.length} items</p>
+                    <hr style="border: none; border-top: 1px solid #86efac; margin: 12px 0;">
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Brute Force O(n²):</strong> ${bruteComparisons} comparisons ${bruteResult ? `→ Found at [${bruteResult[0]}, ${bruteResult[1]}]` : '→ No solution found'}</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Hash Map O(n):</strong> ${hashLookups} lookups ${hashResult ? `→ Found at [${hashResult[0]}, ${hashResult[1]}]` : '→ No solution found'}</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Speedup:</strong> ${(bruteComparisons / hashLookups).toFixed(1)}x faster with hash map</p>
+                </div>
+            `;
+            result.innerHTML = statsHtml;
+            result.classList.add('show');
+
+            playBothBtn.disabled = false;
+        }
 
         // View controls
         viewBothBtn.addEventListener('click', () => {
@@ -780,446 +768,164 @@
             viewHashBtn.classList.add('active');
         });
 
-        // Reset all button
+        // Reset button
         resetBtn.addEventListener('click', () => {
             location.reload();
         });
 
-        // Play both button
+        // Play both
         playBothBtn.addEventListener('click', async () => {
-            // Check if both are paused (resume scenario)
-            if (bruteRunning && brutePaused && hashRunning && hashPaused) {
-                brutePaused = false;
-                hashPaused = false;
+            if (bruteAnimController.isRunning && bruteAnimController.isPaused &&
+                hashAnimController.isRunning && hashAnimController.isPaused) {
+                bruteAnimController.resume();
+                hashAnimController.resume();
                 playBothBtn.disabled = true;
                 pauseBothBtn.disabled = false;
-                
-                brutePlayBtn.disabled = true;
-                brutePauseBtn.disabled = false;
-                bruteStepBtn.disabled = true;
-                hashPlayBtn.disabled = true;
-                hashPauseBtn.disabled = false;
-                hashStepBtn.disabled = true;
-                
-                Promise.all([continueBruteExecution(), continueHashExecution()]);
-            } else if (!bruteRunning && !hashRunning) {
-                // Start both fresh
-                nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
+
+                Promise.all([bruteAnimController.continue(), hashAnimController.continue()]);
+            } else if (!bruteAnimController.isRunning && !hashAnimController.isRunning) {
+                const validation = inputValidator.validateArray(arrayInput.value);
+                if (!validation.valid) return;
+
+                nums = validation.data;
                 target = parseInt(targetInput.value);
-                
-                if (nums.some(isNaN) || isNaN(target)) {
-                    alert('Please enter valid numbers');
-                    return;
-                }
-                
+
                 playBothBtn.disabled = true;
                 pauseBothBtn.disabled = false;
                 result.classList.remove('show');
-                
-                createArrayDisplay('bruteArray');
-                createArrayDisplay('hashArray');
-                
-                bruteRunning = true;
-                bruteStepMode = false;
-                brutePaused = false;
-                brutePlayBtn.disabled = true;
-                brutePauseBtn.disabled = false;
-                bruteStepBtn.disabled = true;
-                bruteGenerator = bruteForceGenerator();
-                
-                hashRunning = true;
-                hashStepMode = false;
-                hashPaused = false;
-                hashPlayBtn.disabled = true;
-                hashPauseBtn.disabled = false;
-                hashStepBtn.disabled = true;
-                hashGenerator = hashMapGenerator();
-                
-                Promise.all([continueBruteExecution(), continueHashExecution()]);
+
+                createArrayDisplay('bruteArray', nums);
+                createArrayDisplay('hashArray', nums);
+
+                Promise.all([
+                    bruteAnimController.start(bruteForceGenerator, false),
+                    hashAnimController.start(hashMapGenerator, false)
+                ]).then(() => {
+                    playBothBtn.disabled = true;
+                    pauseBothBtn.disabled = true;
+                });
             }
         });
 
-        // Pause both button
+        // Pause both
         pauseBothBtn.addEventListener('click', () => {
-            if (bruteRunning && !brutePaused) {
-                brutePaused = true;
-                brutePlayBtn.disabled = false;
-                brutePauseBtn.disabled = true;
-                bruteStepBtn.disabled = false;
-            }
-            
-            if (hashRunning && !hashPaused) {
-                hashPaused = true;
-                hashPlayBtn.disabled = false;
-                hashPauseBtn.disabled = true;
-                hashStepBtn.disabled = false;
-            }
-            
+            bruteAnimController.pause();
+            hashAnimController.pause();
             playBothBtn.disabled = false;
             pauseBothBtn.disabled = true;
         });
 
-        // Brute force controls
+        // Individual algorithm controls - Brute Force
         brutePlayBtn.addEventListener('click', async () => {
-            if (bruteRunning && brutePaused) {
-                brutePaused = false;
+            if (bruteAnimController.isRunning && bruteAnimController.isPaused) {
+                bruteAnimController.resume();
                 brutePlayBtn.disabled = true;
                 brutePauseBtn.disabled = false;
-                bruteStepBtn.disabled = true;
-                bruteStepMode = false;
-                await continueBruteExecution();
-            } else if (!bruteRunning) {
-                await startBruteExecution(false);
+                await bruteAnimController.continue();
+            } else if (!bruteAnimController.isRunning) {
+                const validation = inputValidator.validateArray(arrayInput.value);
+                if (!validation.valid) return;
+
+                nums = validation.data;
+                target = parseInt(targetInput.value);
+
+                brutePlayBtn.disabled = true;
+                brutePauseBtn.disabled = false;
+                createArrayDisplay('bruteArray', nums);
+
+                await bruteAnimController.start(bruteForceGenerator, false);
+                brutePlayBtn.disabled = true;
+                brutePauseBtn.disabled = true;
             }
         });
 
         brutePauseBtn.addEventListener('click', () => {
-            brutePaused = true;
+            bruteAnimController.pause();
             brutePlayBtn.disabled = false;
             brutePauseBtn.disabled = true;
             bruteStepBtn.disabled = false;
         });
 
         bruteStepBtn.addEventListener('click', async () => {
-            if (!bruteRunning) {
-                await startBruteExecution(true);
+            if (!bruteAnimController.isRunning) {
+                const validation = inputValidator.validateArray(arrayInput.value);
+                if (!validation.valid) return;
+
+                nums = validation.data;
+                target = parseInt(targetInput.value);
+                createArrayDisplay('bruteArray', nums);
+
+                await bruteAnimController.start(bruteForceGenerator, true);
             } else {
-                bruteStepMode = true;
-                await executeBruteStep();
+                const complete = await bruteAnimController.step();
+                if (complete) {
+                    brutePlayBtn.disabled = true;
+                    brutePauseBtn.disabled = true;
+                    bruteStepBtn.disabled = true;
+                }
             }
         });
 
         bruteResetBtn.addEventListener('click', () => {
-            resetBruteForce();
+            location.reload();
         });
 
-        // Hash map controls
+        // Individual algorithm controls - Hash Map
         hashPlayBtn.addEventListener('click', async () => {
-            if (hashRunning && hashPaused) {
-                hashPaused = false;
+            if (hashAnimController.isRunning && hashAnimController.isPaused) {
+                hashAnimController.resume();
                 hashPlayBtn.disabled = true;
                 hashPauseBtn.disabled = false;
-                hashStepBtn.disabled = true;
-                hashStepMode = false;
-                await continueHashExecution();
-            } else if (!hashRunning) {
-                await startHashExecution(false);
+                await hashAnimController.continue();
+            } else if (!hashAnimController.isRunning) {
+                const validation = inputValidator.validateArray(arrayInput.value);
+                if (!validation.valid) return;
+
+                nums = validation.data;
+                target = parseInt(targetInput.value);
+
+                hashPlayBtn.disabled = true;
+                hashPauseBtn.disabled = false;
+                createArrayDisplay('hashArray', nums);
+                document.getElementById('hashEntries').innerHTML = '';
+
+                await hashAnimController.start(hashMapGenerator, false);
+                hashPlayBtn.disabled = true;
+                hashPauseBtn.disabled = true;
             }
         });
 
         hashPauseBtn.addEventListener('click', () => {
-            hashPaused = true;
+            hashAnimController.pause();
             hashPlayBtn.disabled = false;
             hashPauseBtn.disabled = true;
             hashStepBtn.disabled = false;
         });
 
         hashStepBtn.addEventListener('click', async () => {
-            if (!hashRunning) {
-                await startHashExecution(true);
+            if (!hashAnimController.isRunning) {
+                const validation = inputValidator.validateArray(arrayInput.value);
+                if (!validation.valid) return;
+
+                nums = validation.data;
+                target = parseInt(targetInput.value);
+                createArrayDisplay('hashArray', nums);
+                document.getElementById('hashEntries').innerHTML = '';
+
+                await hashAnimController.start(hashMapGenerator, true);
             } else {
-                hashStepMode = true;
-                await executeHashStep();
-            }
-        });
-
-        hashResetBtn.addEventListener('click', () => {
-            resetHashMap();
-        });
-
-        // Brute force execution
-        async function startBruteExecution(isStepMode) {
-            nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
-            target = parseInt(targetInput.value);
-            
-            if (nums.some(isNaN) || isNaN(target)) {
-                alert('Please enter valid numbers');
-                return;
-            }
-
-            bruteRunning = true;
-            bruteStepMode = isStepMode;
-            brutePaused = isStepMode;
-            
-            brutePlayBtn.disabled = !isStepMode;
-            brutePauseBtn.disabled = isStepMode;
-            bruteStepBtn.disabled = !isStepMode;
-            
-            createArrayDisplay('bruteArray');
-            bruteGenerator = bruteForceGenerator();
-
-            if (!bruteStepMode) {
-                await continueBruteExecution();
-            } else {
-                await executeBruteStep();
-            }
-        }
-
-        async function continueBruteExecution() {
-            while (!brutePaused && bruteRunning) {
-                await executeBruteStep();
-                if (bruteGenerator === null) {
-                    break;
-                }
-            }
-        }
-
-        async function executeBruteStep() {
-            if (bruteGenerator) {
-                const bruteResult = bruteGenerator.next();
-                if (bruteResult.done) {
-                    bruteGenerator = null;
-                    bruteRunning = false;
-                    brutePlayBtn.disabled = true;
-                    brutePauseBtn.disabled = true;
-                    bruteStepBtn.disabled = true;
-                }
-            }
-
-            if (!bruteStepMode && bruteRunning) {
-                await sleep(1000 / speed);
-            }
-        }
-
-        function resetBruteForce() {
-            bruteRunning = false;
-            brutePaused = false;
-            bruteGenerator = null;
-            bruteStepMode = false;
-            
-            brutePlayBtn.disabled = false;
-            brutePauseBtn.disabled = true;
-            bruteStepBtn.disabled = false;
-            
-            document.getElementById('bruteComparisons').textContent = '0';
-            updateStepInfo('bruteStep', 'Ready to start');
-            highlightCode('bruteCode', null);
-            createArrayDisplay('bruteArray');
-        }
-
-        // Hash map execution
-        async function startHashExecution(isStepMode) {
-            nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
-            target = parseInt(targetInput.value);
-            
-            if (nums.some(isNaN) || isNaN(target)) {
-                alert('Please enter valid numbers');
-                return;
-            }
-
-            hashRunning = true;
-            hashStepMode = isStepMode;
-            hashPaused = isStepMode;
-            
-            hashPlayBtn.disabled = !isStepMode;
-            hashPauseBtn.disabled = isStepMode;
-            hashStepBtn.disabled = !isStepMode;
-            
-            createArrayDisplay('hashArray');
-            hashGenerator = hashMapGenerator();
-
-            if (!hashStepMode) {
-                await continueHashExecution();
-            } else {
-                await executeHashStep();
-            }
-        }
-
-        async function continueHashExecution() {
-            while (!hashPaused && hashRunning) {
-                await executeHashStep();
-                if (hashGenerator === null) {
-                    break;
-                }
-            }
-        }
-
-        async function executeHashStep() {
-            if (hashGenerator) {
-                const hashResult = hashGenerator.next();
-                if (hashResult.done) {
-                    hashGenerator = null;
-                    hashRunning = false;
+                const complete = await hashAnimController.step();
+                if (complete) {
                     hashPlayBtn.disabled = true;
                     hashPauseBtn.disabled = true;
                     hashStepBtn.disabled = true;
                 }
             }
+        });
 
-            if (!hashStepMode && hashRunning) {
-                await sleep(1000 / speed);
-            }
-        }
-
-        function resetHashMap() {
-            hashRunning = false;
-            hashPaused = false;
-            hashGenerator = null;
-            hashStepMode = false;
-            
-            hashPlayBtn.disabled = false;
-            hashPauseBtn.disabled = true;
-            hashStepBtn.disabled = false;
-            
-            document.getElementById('hashLookups').textContent = '0';
-            document.getElementById('hashEntries').innerHTML = '';
-            updateStepInfo('hashStep', 'Ready to start');
-            highlightCode('hashCode', null);
-            createArrayDisplay('hashArray');
-        }
-
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        function createArrayDisplay(containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            nums.forEach((num, idx) => {
-                const item = document.createElement('div');
-                item.className = 'array-item';
-                item.innerHTML = `<span class="index">${idx}</span>${num}`;
-                item.id = `${containerId}-${idx}`;
-                container.appendChild(item);
-            });
-        }
-
-        function highlightCode(panelId, lineNum) {
-            const panel = document.getElementById(panelId);
-            panel.querySelectorAll('.code-line').forEach(line => {
-                line.classList.remove('active');
-            });
-            if (lineNum) {
-                const line = panel.querySelector(`[data-line="${lineNum}"]`);
-                if (line) line.classList.add('active');
-            }
-        }
-
-        function updateStepInfo(elementId, text) {
-            document.getElementById(elementId).textContent = text;
-        }
-
-        function* bruteForceGenerator() {
-            let comparisons = 0;
-            const compEl = document.getElementById('bruteComparisons');
-
-            highlightCode('bruteCode', 1);
-            updateStepInfo('bruteStep', 'Starting outer loop');
-            yield;
-
-            for (let i = 0; i < nums.length; i++) {
-                highlightCode('bruteCode', 1);
-                document.getElementById(`bruteArray-${i}`).classList.add('current');
-                updateStepInfo('bruteStep', `Outer loop: i=${i}, nums[${i}]=${nums[i]}`);
-                yield;
-
-                for (let j = i + 1; j < nums.length; j++) {
-                    highlightCode('bruteCode', 2);
-                    document.getElementById(`bruteArray-${j}`).classList.add('checking');
-                    updateStepInfo('bruteStep', `Inner loop: j=${j}, checking ${nums[i]} + ${nums[j]}`);
-                    yield;
-
-                    highlightCode('bruteCode', 3);
-                    comparisons++;
-                    compEl.textContent = comparisons;
-                    const sum = nums[i] + nums[j];
-                    updateStepInfo('bruteStep', `Comparing: ${nums[i]} + ${nums[j]} = ${sum} vs target ${target}`);
-                    yield;
-
-                    if (nums[i] + nums[j] === target) {
-                        highlightCode('bruteCode', 4);
-                        document.getElementById(`bruteArray-${i}`).classList.add('found');
-                        document.getElementById(`bruteArray-${j}`).classList.add('found');
-                        updateStepInfo('bruteStep', `✓ Found! Returning [${i}, ${j}]`);
-                        showResult('Brute Force', i, j);
-                        yield;
-                        return;
-                    }
-
-                    document.getElementById(`bruteArray-${j}`).classList.remove('checking');
-                    updateStepInfo('bruteStep', `No match, continuing...`);
-                    yield;
-                }
-
-                highlightCode('bruteCode', 5);
-                document.getElementById(`bruteArray-${i}`).classList.remove('current');
-                updateStepInfo('bruteStep', `Finished inner loop for i=${i}`);
-                yield;
-            }
-
-            highlightCode('bruteCode', 6);
-            updateStepInfo('bruteStep', 'Algorithm complete - no solution found');
-        }
-
-        function* hashMapGenerator() {
-            const hashMap = new Map();
-            const entriesContainer = document.getElementById('hashEntries');
-            let lookups = 0;
-            const lookupsEl = document.getElementById('hashLookups');
-
-            highlightCode('hashCode', 1);
-            updateStepInfo('hashStep', 'Initializing empty hash map');
-            yield;
-
-            for (let i = 0; i < nums.length; i++) {
-                highlightCode('hashCode', 2);
-                document.getElementById(`hashArray-${i}`).classList.add('current');
-                updateStepInfo('hashStep', `Processing index ${i}, value = ${nums[i]}`);
-                yield;
-
-                highlightCode('hashCode', 3);
-                const complement = target - nums[i];
-                updateStepInfo('hashStep', `Calculating complement: ${target} - ${nums[i]} = ${complement}`);
-                yield;
-
-                highlightCode('hashCode', 4);
-                lookups++;
-                lookupsEl.textContent = lookups;
-                updateStepInfo('hashStep', `Looking up ${complement} in hash map...`);
-                yield;
-
-                if (hashMap.has(complement)) {
-                    highlightCode('hashCode', 5);
-                    const j = hashMap.get(complement);
-                    document.getElementById(`hashArray-${i}`).classList.add('found');
-                    document.getElementById(`hashArray-${j}`).classList.add('found');
-                    updateStepInfo('hashStep', `✓ Found! ${complement} exists at index ${j}`);
-                    showResult('Hash Map', j, i);
-                    yield;
-                    return;
-                }
-
-                updateStepInfo('hashStep', `${complement} not in map, adding ${nums[i]} → ${i}`);
-                yield;
-
-                highlightCode('hashCode', 6);
-                hashMap.set(nums[i], i);
-                
-                const entry = document.createElement('div');
-                entry.className = 'hash-entry';
-                entry.textContent = `${nums[i]} → ${i}`;
-                entriesContainer.appendChild(entry);
-                
-                updateStepInfo('hashStep', `Added ${nums[i]} → ${i} to hash map`);
-                yield;
-
-                document.getElementById(`hashArray-${i}`).classList.remove('current');
-                yield;
-            }
-
-            highlightCode('hashCode', 7);
-            updateStepInfo('hashStep', 'Algorithm complete - no solution found');
-        }
-
-        function showResult(algorithm, i, j) {
-            result.innerHTML = `✓ <strong>${algorithm}</strong> found solution: indices [${i}, ${j}] → ${nums[i]} + ${nums[j]} = ${target}`;
-            result.classList.add('show');
-        }
-
-        // Initialize display
-        nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
-        createArrayDisplay('bruteArray');
-        createArrayDisplay('hashArray');
+        hashResetBtn.addEventListener('click', () => {
+            location.reload();
+        });
     </script>
 </body>
 </html>

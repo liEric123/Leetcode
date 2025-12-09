@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Two Numbers Visualizer - LeetCode #2</title>
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="visualizer-template.css">
+    <style>
+        /* ==================== PROBLEM-SPECIFIC STYLES ==================== */
+
+        .linked-list-container {
+            margin-bottom: 30px;
+        }
+
+        .linked-list-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .linked-list-label {
+            color: #cbd5e0;
+        }
+
+        .number-display {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .linked-list {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .linked-list {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        .node {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .node-box {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border: 3px solid #cbd5e0;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        body.dark-mode .node-box {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+
+        .node-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        body.dark-mode .node-value {
+            color: #e2e8f0;
+        }
+
+        .node-pointer {
+            font-size: 10px;
+            color: #a0aec0;
+            margin-top: 2px;
+        }
+
+        .node-box.current {
+            border-color: #4299e1;
+            background: #ebf8ff;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+        }
+
+        .node-box.processed {
+            border-color: #48bb78;
+            background: #c6f6d5;
+        }
+
+        .arrow {
+            font-size: 24px;
+            color: #a0aec0;
+        }
+
+        .carry-display {
+            position: absolute;
+            top: -30px;
+            right: -10px;
+            background: #fed7d7;
+            border: 2px solid #fc8181;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #c53030;
+            animation: popIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .operation-display {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .operation-display {
+            background: #2d3748;
+        }
+
+        .operation-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        body.dark-mode .operation-title {
+            color: #cbd5e0;
+        }
+
+        .operation-math {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 18px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        body.dark-mode .operation-math {
+            color: #e2e8f0;
+        }
+
+        .operation-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .input-group .hint {
+            font-size: 11px;
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .node-box {
+                width: 60px;
+                height: 60px;
+                font-size: 18px;
+            }
+
+            .linked-list {
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .node-box {
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+            }
+
+            .operation-math {
+                font-size: 14px;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
+        <h1>➕ Add Two Numbers Visualizer</h1>
+        <p class="subtitle">LeetCode #2 - Linked List Addition with Carry</p>
+
+        <!-- Input Limit Modal -->
+        <div class="modal-overlay" id="inputModal">
+            <div class="modal">
+                <h2>⚠️ Input Too Large</h2>
+                <p id="modalMessage"></p>
+                <div class="modal-buttons">
+                    <button class="primary" id="modalReduceBtn">Reduce Input</button>
+                    <button class="secondary" id="modalStatsBtn">Show Stats Only</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YouTube Video Section -->
+        <div class="video-section">
+            <div class="video-header">
+                <div class="video-title">📺 Solution Walkthrough Video</div>
+                <button class="toggle-btn" id="videoToggle">−</button>
+            </div>
+            <div class="video-content" id="videoContent">
+                <div class="video-container">
+                    <iframe id="videoFrame"
+                        src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="timestamps-section">
+                    <div class="timestamps-label">⏱ Quick Links</div>
+                    <div class="timestamps-list" id="timestampsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Visualizer Section -->
+        <div class="visualizer-section">
+            <div class="visualizer-header">
+                <h2>Interactive Add Two Numbers Visualizer</h2>
+                <p>Step through the algorithm and see how it works in real-time</p>
+            </div>
+
+            <div class="controls">
+                <div class="controls-row">
+                    <div class="input-group">
+                        <label>List 1 (Reversed)</label>
+                        <input type="text" id="list1Input" value="2,4,3" placeholder="e.g., 2,4,3">
+                        <span class="hint">342 in reverse order</span>
+                    </div>
+                    <div class="input-group">
+                        <label>List 2 (Reversed)</label>
+                        <input type="text" id="list2Input" value="5,6,4" placeholder="e.g., 5,6,4">
+                        <span class="hint">465 in reverse order</span>
+                    </div>
+                    <div class="speed-control">
+                        <label>Animation Speed</label>
+                        <div class="slider-container">
+                            <input type="range" id="speedSlider" min="1" max="20" value="3">
+                            <span class="speed-value" id="speedValue">0.3x</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls-row">
+                    <div class="button-group">
+                        <button id="playBtn">▶ Play</button>
+                        <button id="pauseBtn" class="secondary" disabled>⏸ Pause</button>
+                        <button id="stepBtn" class="tertiary">⏭ Step</button>
+                        <button id="resetBtn" class="outline">↻ Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">Number 1</div>
+                    <div class="stat-value" id="num1Display">342</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Number 2</div>
+                    <div class="stat-value" id="num2Display">465</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Result</div>
+                    <div class="stat-value" id="resultDisplay">?</div>
+                </div>
+            </div>
+
+            <div class="visualization">
+                <div class="linked-list-container">
+                    <div class="linked-list-label">
+                        List 1: <span class="number-display" id="list1Number"></span>
+                    </div>
+                    <div class="linked-list" id="list1Container"></div>
+                </div>
+
+                <div class="linked-list-container">
+                    <div class="linked-list-label">
+                        List 2: <span class="number-display" id="list2Number"></span>
+                    </div>
+                    <div class="linked-list" id="list2Container"></div>
+                </div>
+
+                <div class="operation-display">
+                    <div class="operation-title">Current Operation</div>
+                    <div class="operation-math" id="operationDisplay">
+                        Waiting to start...
+                    </div>
+                </div>
+
+                <div class="linked-list-container">
+                    <div class="linked-list-label">
+                        Result: <span class="number-display" id="resultNumber"></span>
+                    </div>
+                    <div class="linked-list" id="resultContainer"></div>
+                </div>
+            </div>
+
+            <div class="code-header">
+                <span class="code-title">Code</span>
+                <div class="lang-toggle">
+                    <button class="lang-btn active" data-lang="cpp">C++</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                </div>
+            </div>
+
+            <div class="code-panel" id="codePanelCpp">
+                <div class="code-line" data-line="1"><span class="keyword">int</span> carry = <span class="keyword">0</span>;</div>
+                <div class="code-line" data-line="2">ListNode* dummy = <span class="keyword">new</span> ListNode(<span class="keyword">0</span>);</div>
+                <div class="code-line" data-line="3">ListNode* result = dummy;</div>
+                <div class="code-line" data-line="4"><span class="keyword">while</span> (l1 || l2 || carry) {</div>
+                <div class="code-line" data-line="5">&nbsp;&nbsp;<span class="keyword">int</span> val1 = l1 ? l1-&gt;val : <span class="keyword">0</span>;</div>
+                <div class="code-line" data-line="6">&nbsp;&nbsp;<span class="keyword">int</span> val2 = l2 ? l2-&gt;val : <span class="keyword">0</span>;</div>
+                <div class="code-line" data-line="7">&nbsp;&nbsp;<span class="keyword">int</span> total = val1 + val2 + carry;</div>
+                <div class="code-line" data-line="8">&nbsp;&nbsp;carry = total / <span class="keyword">10</span>;</div>
+                <div class="code-line" data-line="9">&nbsp;&nbsp;result-&gt;next = <span class="keyword">new</span> ListNode(total % <span class="keyword">10</span>);</div>
+                <div class="code-line" data-line="10">&nbsp;&nbsp;result = result-&gt;next;</div>
+                <div class="code-line" data-line="11">&nbsp;&nbsp;<span class="keyword">if</span> (l1) l1 = l1-&gt;next;</div>
+                <div class="code-line" data-line="12">&nbsp;&nbsp;<span class="keyword">if</span> (l2) l2 = l2-&gt;next;</div>
+                <div class="code-line" data-line="13">}</div>
+                <div class="code-line" data-line="14"><span class="keyword">return</span> dummy-&gt;next;</div>
+            </div>
+
+            <div class="code-panel" id="codePanelJava" style="display: none;">
+                <div class="code-line" data-line="1"><span class="keyword">int</span> carry = <span class="keyword">0</span>;</div>
+                <div class="code-line" data-line="2">ListNode dummy = <span class="keyword">new</span> ListNode(<span class="keyword">0</span>);</div>
+                <div class="code-line" data-line="3">ListNode result = dummy;</div>
+                <div class="code-line" data-line="4"><span class="keyword">while</span> (l1 != <span class="keyword">null</span> || l2 != <span class="keyword">null</span> || carry != <span class="keyword">0</span>) {</div>
+                <div class="code-line" data-line="5">&nbsp;&nbsp;<span class="keyword">int</span> val1 = (l1 != <span class="keyword">null</span>) ? l1.val : <span class="keyword">0</span>;</div>
+                <div class="code-line" data-line="6">&nbsp;&nbsp;<span class="keyword">int</span> val2 = (l2 != <span class="keyword">null</span>) ? l2.val : <span class="keyword">0</span>;</div>
+                <div class="code-line" data-line="7">&nbsp;&nbsp;<span class="keyword">int</span> total = val1 + val2 + carry;</div>
+                <div class="code-line" data-line="8">&nbsp;&nbsp;carry = total / <span class="keyword">10</span>;</div>
+                <div class="code-line" data-line="9">&nbsp;&nbsp;result.next = <span class="keyword">new</span> ListNode(total % <span class="keyword">10</span>);</div>
+                <div class="code-line" data-line="10">&nbsp;&nbsp;result = result.next;</div>
+                <div class="code-line" data-line="11">&nbsp;&nbsp;<span class="keyword">if</span> (l1 != <span class="keyword">null</span>) l1 = l1.next;</div>
+                <div class="code-line" data-line="12">&nbsp;&nbsp;<span class="keyword">if</span> (l2 != <span class="keyword">null</span>) l2 = l2.next;</div>
+                <div class="code-line" data-line="13">}</div>
+                <div class="code-line" data-line="14"><span class="keyword">return</span> dummy.next;</div>
+            </div>
+
+            <div class="step-info" id="stepInfo">Ready to start</div>
+        </div>
+    </div>
+
+    <!-- Problem-specific JavaScript -->
+    <script>
+        const PROBLEM_NAME = 'addTwoNumbers';
+    </script>
+
+    <!-- Shared JavaScript -->
+    <script src="visualizer-template.js"></script>
+
+    <script>
+        // State
+        let list1 = [];
+        let list2 = [];
+        let animationController;
+
+        // Elements
+        const list1Input = document.getElementById('list1Input');
+        const list2Input = document.getElementById('list2Input');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stepBtn = document.getElementById('stepBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            initVisualizer();
+
+            animationController = new AnimationController(speedController);
+            inputValidator.setStatsCallback(runStatsOnly);
+
+            // Initialize display
+            const initList1 = list1Input.value.split(',').map(n => parseInt(n.trim()));
+            const initList2 = list2Input.value.split(',').map(n => parseInt(n.trim()));
+            createLinkedList('list1Container', initList1);
+            createLinkedList('list2Container', initList2);
+            createLinkedList('resultContainer', []);
+        });
+
+        // Visualization functions
+        function createLinkedList(containerId, values) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            values.forEach((val, idx) => {
+                const node = document.createElement('div');
+                node.className = 'node';
+
+                const nodeBox = document.createElement('div');
+                nodeBox.className = 'node-box';
+                nodeBox.id = `${containerId}-node-${idx}`;
+                nodeBox.innerHTML = `
+                    <div class="node-value">${val}</div>
+                    <div class="node-pointer">node</div>
+                `;
+
+                node.appendChild(nodeBox);
+
+                if (idx < values.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'arrow';
+                    arrow.textContent = '→';
+                    node.appendChild(arrow);
+                }
+
+                container.appendChild(node);
+            });
+
+            if (values.length === 0) {
+                container.innerHTML = '<div style="color: #a0aec0; font-style: italic;">Empty</div>';
+            }
+        }
+
+        function updateOperation(text) {
+            document.getElementById('operationDisplay').innerHTML = text;
+        }
+
+        function addCarryIndicator(containerId, nodeIdx, carry) {
+            const node = document.getElementById(`${containerId}-node-${nodeIdx}`);
+            if (node && carry > 0) {
+                const carryDiv = document.createElement('div');
+                carryDiv.className = 'carry-display';
+                carryDiv.textContent = carry;
+                node.appendChild(carryDiv);
+            }
+        }
+
+        // Custom validation for two lists
+        function validateLists() {
+            const inputList1 = list1Input.value.split(',').map(n => parseInt(n.trim()));
+            const inputList2 = list2Input.value.split(',').map(n => parseInt(n.trim()));
+
+            if (inputList1.some(isNaN) || inputList2.some(isNaN)) {
+                alert('Please enter valid numbers');
+                return { valid: false };
+            }
+
+            const maxLen = Math.max(inputList1.length, inputList2.length);
+            if (maxLen > INPUT_LIMIT) {
+                inputValidator.modalMessage.innerHTML = `Your lists have up to <strong>${maxLen}</strong> digits, but visualization works best with ≤${INPUT_LIMIT} digits.`;
+                inputValidator.inputModal.classList.add('active');
+                return { valid: false, shouldShowStats: true };
+            }
+
+            return { valid: true, data: [inputList1, inputList2] };
+        }
+
+        // Algorithm generator
+        function* addTwoNumbersGenerator() {
+            let carry = 0;
+            let result = [];
+            let i = 0;
+
+            codeHighlighter.highlightCode('codePanel', 1);
+            uiUpdater.updateStepInfo('stepInfo', 'Initializing carry = 0');
+            yield;
+
+            codeHighlighter.highlightCode('codePanel', 2);
+            uiUpdater.updateStepInfo('stepInfo', 'Creating dummy node');
+            yield;
+
+            codeHighlighter.highlightCode('codePanel', 3);
+            uiUpdater.updateStepInfo('stepInfo', 'Setting result pointer to dummy');
+            yield;
+
+            const maxLen = Math.max(list1.length, list2.length);
+
+            while (i < maxLen || carry > 0) {
+                codeHighlighter.highlightCode('codePanel', 4);
+                uiUpdater.updateStepInfo('stepInfo', `Starting iteration ${i + 1}`);
+                yield;
+
+                // Highlight current nodes
+                if (i < list1.length) {
+                    document.getElementById(`list1Container-node-${i}`)?.classList.add('current');
+                }
+                if (i < list2.length) {
+                    document.getElementById(`list2Container-node-${i}`)?.classList.add('current');
+                }
+
+                codeHighlighter.highlightCode('codePanel', 5);
+                const val1 = i < list1.length ? list1[i] : 0;
+                uiUpdater.updateStepInfo('stepInfo', `Getting value from List 1: ${val1}`);
+                yield;
+
+                codeHighlighter.highlightCode('codePanel', 6);
+                const val2 = i < list2.length ? list2[i] : 0;
+                uiUpdater.updateStepInfo('stepInfo', `Getting value from List 2: ${val2}`);
+                yield;
+
+                codeHighlighter.highlightCode('codePanel', 7);
+                const total = val1 + val2 + carry;
+                updateOperation(`
+                    <span class="operation-value">${val1}</span> +
+                    <span class="operation-value">${val2}</span> +
+                    <span class="operation-value">${carry}</span> (carry) =
+                    <span class="operation-value">${total}</span>
+                `);
+                uiUpdater.updateStepInfo('stepInfo', `Total sum: ${val1} + ${val2} + ${carry} = ${total}`);
+                yield;
+
+                codeHighlighter.highlightCode('codePanel', 8);
+                const newCarry = Math.floor(total / 10);
+                carry = newCarry;
+                uiUpdater.updateStepInfo('stepInfo', `New carry: ${total} ÷ 10 = ${carry}`);
+                yield;
+
+                codeHighlighter.highlightCode('codePanel', 9);
+                const digit = total % 10;
+                result.push(digit);
+                uiUpdater.updateStepInfo('stepInfo', `Adding digit to result: ${total} % 10 = ${digit}`);
+                createLinkedList('resultContainer', result);
+
+                if (carry > 0) {
+                    addCarryIndicator('resultContainer', result.length - 1, carry);
+                }
+                yield;
+
+                codeHighlighter.highlightCode('codePanel', 10);
+                uiUpdater.updateStepInfo('stepInfo', 'Moving result pointer forward');
+                yield;
+
+                // Mark as processed
+                if (i < list1.length) {
+                    const node = document.getElementById(`list1Container-node-${i}`);
+                    node?.classList.remove('current');
+                    node?.classList.add('processed');
+                }
+                if (i < list2.length) {
+                    const node = document.getElementById(`list2Container-node-${i}`);
+                    node?.classList.remove('current');
+                    node?.classList.add('processed');
+                }
+
+                codeHighlighter.highlightCode('codePanel', 11);
+                uiUpdater.updateStepInfo('stepInfo', 'Moving List 1 pointer forward');
+                yield;
+
+                codeHighlighter.highlightCode('codePanel', 12);
+                uiUpdater.updateStepInfo('stepInfo', 'Moving List 2 pointer forward');
+                yield;
+
+                i++;
+            }
+
+            codeHighlighter.highlightCode('codePanel', 13);
+            uiUpdater.updateStepInfo('stepInfo', 'Exiting while loop');
+            yield;
+
+            codeHighlighter.highlightCode('codePanel', 14);
+            const resultNum = parseInt([...result].reverse().join(''));
+            document.getElementById('resultDisplay').textContent = resultNum;
+            uiUpdater.updateStepInfo('stepInfo', `✓ Complete! Result: ${resultNum}`);
+            updateOperation(`<span class="operation-value">Result: ${resultNum}</span>`);
+        }
+
+        // Stats only mode
+        async function runStatsOnly() {
+            list1 = list1Input.value.split(',').map(n => parseInt(n.trim()));
+            list2 = list2Input.value.split(',').map(n => parseInt(n.trim()));
+
+            playBtn.disabled = true;
+            pauseBtn.disabled = true;
+
+            // Calculate result
+            let carry = 0;
+            let result = [];
+            let operations = 0;
+
+            const maxLen = Math.max(list1.length, list2.length);
+            for (let i = 0; i < maxLen || carry > 0; i++) {
+                operations++;
+                const val1 = i < list1.length ? list1[i] : 0;
+                const val2 = i < list2.length ? list2[i] : 0;
+                const total = val1 + val2 + carry;
+                carry = Math.floor(total / 10);
+                result.push(total % 10);
+            }
+
+            // Display results
+            const num1 = parseInt([...list1].reverse().join('')) || 0;
+            const num2 = parseInt([...list2].reverse().join('')) || 0;
+            const resultNum = parseInt([...result].reverse().join('')) || 0;
+
+            const statsHtml = `
+                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 8px;">
+                    <h3 style="color: #166534; margin-bottom: 12px;">📊 Addition Statistics</h3>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Number 1:</strong> ${num1}</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Number 2:</strong> ${num2}</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Result:</strong> ${resultNum}</p>
+                    <hr style="border: none; border-top: 1px solid #86efac; margin: 12px 0;">
+                    <p style="color: #15803d; margin: 8px 0;"><strong>List 1 length:</strong> ${list1.length} digits</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>List 2 length:</strong> ${list2.length} digits</p>
+                    <p style="color: #15803d; margin: 8px 0;"><strong>Operations:</strong> ${operations} iterations (O(n))</p>
+                </div>
+            `;
+
+            document.getElementById('resultDisplay').textContent = resultNum;
+            document.getElementById('stepInfo').innerHTML = statsHtml;
+
+            playBtn.disabled = false;
+        }
+
+        // Button handlers
+        playBtn.addEventListener('click', async () => {
+            if (animationController.isRunning && animationController.isPaused) {
+                animationController.resume();
+                playBtn.disabled = true;
+                pauseBtn.disabled = false;
+                stepBtn.disabled = true;
+                await animationController.continue();
+            } else if (!animationController.isRunning) {
+                const validation = validateLists();
+                if (!validation.valid) return;
+
+                list1 = validation.data[0];
+                list2 = validation.data[1];
+
+                playBtn.disabled = true;
+                pauseBtn.disabled = false;
+                stepBtn.disabled = true;
+
+                // Display numbers
+                const num1 = parseInt([...list1].reverse().join(''));
+                const num2 = parseInt([...list2].reverse().join(''));
+                document.getElementById('num1Display').textContent = num1;
+                document.getElementById('num2Display').textContent = num2;
+
+                createLinkedList('list1Container', list1);
+                createLinkedList('list2Container', list2);
+                createLinkedList('resultContainer', []);
+
+                await animationController.start(addTwoNumbersGenerator, false);
+
+                playBtn.disabled = true;
+                pauseBtn.disabled = true;
+                stepBtn.disabled = true;
+            }
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            animationController.pause();
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stepBtn.disabled = false;
+        });
+
+        stepBtn.addEventListener('click', async () => {
+            if (!animationController.isRunning) {
+                const validation = validateLists();
+                if (!validation.valid) return;
+
+                list1 = validation.data[0];
+                list2 = validation.data[1];
+
+                playBtn.disabled = false;
+                pauseBtn.disabled = true;
+                stepBtn.disabled = false;
+
+                // Display numbers
+                const num1 = parseInt([...list1].reverse().join(''));
+                const num2 = parseInt([...list2].reverse().join(''));
+                document.getElementById('num1Display').textContent = num1;
+                document.getElementById('num2Display').textContent = num2;
+
+                createLinkedList('list1Container', list1);
+                createLinkedList('list2Container', list2);
+                createLinkedList('resultContainer', []);
+
+                await animationController.start(addTwoNumbersGenerator, true);
+            } else {
+                const complete = await animationController.step();
+                if (complete) {
+                    playBtn.disabled = true;
+                    pauseBtn.disabled = true;
+                    stepBtn.disabled = true;
+                }
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            location.reload();
+        });
+    </script>
+</body>
+</html>
