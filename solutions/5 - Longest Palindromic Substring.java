@@ -37,5 +37,6 @@ class Solution {
         String s = sc.nextLine();
         String result = sol.longestPalindrome(s);
         System.out.println("The longest palindromic substring is: " + result);
+        sc.close();
     }
 }

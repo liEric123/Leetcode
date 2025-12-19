@@ -30,5 +30,6 @@ class Solution {
         int target = sc.nextInt();
         int[] result = sol.twoSum(nums, target);
         System.out.println("The two numbers that add up to the target are indices: " + result[0] + " and " + result[1]);
+        sc.close();
     }
 }

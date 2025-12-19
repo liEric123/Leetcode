@@ -30,5 +30,6 @@ class Solution {
         int result = sol.lengthOfLongestSubstring(input);
         System.out.println("Input String: " + input);
         System.out.println("Longest Substring Length: " + result);
+        sc.close();
     }
 }
