@@ -46,5 +46,6 @@ class Solution {
         String result = sol.convert(s, numRows);
         System.out.println("Converted ZigZag string:");
         System.out.println(result);
+        sc.close();
     }
 }

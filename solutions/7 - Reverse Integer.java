@@ -29,5 +29,6 @@ class Solution {
         int x = sc.nextInt();
         int result = sol.reverse(x);
         System.out.println("The reversed integer is: " + result);
+        sc.close();
     }
 }

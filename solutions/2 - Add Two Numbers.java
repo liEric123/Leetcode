@@ -116,5 +116,6 @@ class Solution {
             result = result.next;
         }
         System.out.println();
+        sc.close();
     }
 }

@@ -14,17 +14,18 @@ class Solution {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
         System.out.print("Enter haystack: ");
-        String haystack = scanner.nextLine();
+        String haystack = sc.nextLine();
 
         System.out.print("Enter needle: ");
-        String needle = scanner.nextLine();
+        String needle = sc.nextLine();
 
         Solution solution = new Solution();
         int result = solution.strStr(haystack, needle);
 
         System.out.println("Output: " + result);
+        sc.close();
     }
 }

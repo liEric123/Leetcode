@@ -33,5 +33,6 @@ class Solution {
         System.out.println("New length: " + k);
         System.out.print("Array after removal: ");
         for (int i = 0; i < k; i++) System.out.print(nums[i] + " ");
+        sc.close();
     }
 }
