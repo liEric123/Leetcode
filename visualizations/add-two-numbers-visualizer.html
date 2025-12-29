@@ -3,24 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Two Numbers Visualizer - LeetCode #2</title>
+    <title>LeetCode #2: Add Two Numbers - Visualizer</title>
     <!-- Shared styles -->
     <link rel="stylesheet" href="visualizer-template.css">
     <style>
         /* ==================== PROBLEM-SPECIFIC STYLES ==================== */
 
+        /* Main Layout: Side-by-Side */
+        .main-layout {
+            display: flex;
+            gap: 6px;
+            align-items: flex-start;
+        }
+
+        .controls-sidebar {
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .visualization-area {
+            flex: 1;
+            min-width: 0;
+        }
+
         .linked-list-container {
-            margin-bottom: 30px;
+            margin-bottom: 4px;
         }
 
         .linked-list-label {
-            font-size: 14px;
+            font-size: 10px;
             font-weight: 600;
             color: #4a5568;
-            margin-bottom: 12px;
+            margin-bottom: 3px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
         }
 
         body.dark-mode .linked-list-label {
@@ -29,21 +48,25 @@
 
         .number-display {
             font-family: 'SF Mono', Monaco, monospace;
-            font-size: 18px;
+            font-size: 11px;
             color: #667eea;
             font-weight: 600;
+        }
+
+        body.dark-mode .number-display {
+            color: #63b3ed;
         }
 
         .linked-list {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 4px;
             flex-wrap: wrap;
-            padding: 20px;
+            padding: 4px;
             background: #f7fafc;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            min-height: 100px;
+            border-radius: 3px;
+            border: 1px solid #e2e8f0;
+            min-height: 45px;
             transition: all 0.3s ease;
         }
 
@@ -55,15 +78,15 @@
         .node {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 2px;
         }
 
         .node-box {
-            width: 70px;
-            height: 70px;
+            width: 38px;
+            height: 38px;
             background: white;
-            border: 3px solid #cbd5e0;
-            border-radius: 10px;
+            border: 2px solid #cbd5e0;
+            border-radius: 4px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -79,7 +102,7 @@
         }
 
         .node-value {
-            font-size: 24px;
+            font-size: 14px;
             font-weight: 700;
             color: #1a202c;
         }
@@ -90,15 +113,24 @@
 
         .node-pointer {
             font-size: 10px;
-            color: #a0aec0;
+            color: #718096;
             margin-top: 2px;
+        }
+
+        body.dark-mode .node-pointer {
+            color: #cbd5e0;
         }
 
         .node-box.current {
             border-color: #4299e1;
             background: #ebf8ff;
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(66, 153, 225, 0.4);
+        }
+
+        body.dark-mode .node-box.current {
+            background: #2c5282;
+            border-color: #63b3ed;
         }
 
         .node-box.processed {
@@ -106,9 +138,18 @@
             background: #c6f6d5;
         }
 
+        body.dark-mode .node-box.processed {
+            background: #22543d;
+            border-color: #68d391;
+        }
+
         .arrow {
-            font-size: 24px;
-            color: #a0aec0;
+            font-size: 12px;
+            color: #718096;
+        }
+
+        body.dark-mode .arrow {
+            color: #cbd5e0;
         }
 
         .carry-display {
@@ -129,6 +170,12 @@
             animation: popIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        body.dark-mode .carry-display {
+            background: #742a2a;
+            border-color: #fc8181;
+            color: #feb2b2;
+        }
+
         @keyframes popIn {
             from {
                 transform: scale(0);
@@ -142,10 +189,10 @@
 
         .operation-display {
             background: #edf2f7;
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-            margin-bottom: 30px;
+            padding: 4px 6px;
+            border-radius: 3px;
+            border-left: 2px solid #667eea;
+            margin-bottom: 4px;
             transition: all 0.3s ease;
         }
 
@@ -154,12 +201,12 @@
         }
 
         .operation-title {
-            font-size: 13px;
+            font-size: 9px;
             font-weight: 600;
             color: #4a5568;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+            margin-bottom: 3px;
         }
 
         body.dark-mode .operation-title {
@@ -168,11 +215,11 @@
 
         .operation-math {
             font-family: 'SF Mono', Monaco, monospace;
-            font-size: 18px;
+            font-size: 11px;
             color: #2d3748;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 4px;
         }
 
         body.dark-mode .operation-math {
@@ -219,21 +266,9 @@
 </head>
 <body>
     <div class="container">
-        <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
-        <h1>➕ Add Two Numbers Visualizer</h1>
-        <p class="subtitle">LeetCode #2 - Linked List Addition with Carry</p>
-
-        <!-- Input Limit Modal -->
-        <div class="modal-overlay" id="inputModal">
-            <div class="modal">
-                <h2>⚠️ Input Too Large</h2>
-                <p id="modalMessage"></p>
-                <div class="modal-buttons">
-                    <button class="primary" id="modalReduceBtn">Reduce Input</button>
-                    <button class="secondary" id="modalStatsBtn">Show Stats Only</button>
-                </div>
-            </div>
-        </div>
+        <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle dark mode">🌙</button>
+        <h1>LeetCode #2: Add Two Numbers</h1>
+        <p class="subtitle">Add two numbers represented as reversed linked lists</p>
 
         <!-- YouTube Video Section -->
         <div class="video-section">
@@ -258,28 +293,24 @@
 
         <!-- Interactive Visualizer Section -->
         <div class="visualizer-section">
-            <div class="visualizer-header">
-                <h2>Interactive Add Two Numbers Visualizer</h2>
-                <p>Step through the algorithm and see how it works in real-time</p>
+        <!-- Main Layout: Controls + Visualization Side-by-Side -->
+        <div class="main-layout">
+            <!-- Left Sidebar: Controls -->
+            <div class="controls-sidebar">
+            <!-- Test Case Selector -->
+            <div class="test-case-section">
+                <label class="test-case-label">Select Test Case</label>
+                <div id="testCaseSelector"></div>
+                <div id="testCaseDescription">Select a test case to visualize the algorithm</div>
             </div>
 
             <div class="controls">
                 <div class="controls-row">
-                    <div class="input-group">
-                        <label>List 1 (Reversed)</label>
-                        <input type="text" id="list1Input" value="2,4,3" placeholder="e.g., 2,4,3">
-                        <span class="hint">342 in reverse order</span>
-                    </div>
-                    <div class="input-group">
-                        <label>List 2 (Reversed)</label>
-                        <input type="text" id="list2Input" value="5,6,4" placeholder="e.g., 5,6,4">
-                        <span class="hint">465 in reverse order</span>
-                    </div>
                     <div class="speed-control">
                         <label>Animation Speed</label>
                         <div class="slider-container">
-                            <input type="range" id="speedSlider" min="1" max="20" value="3">
-                            <span class="speed-value" id="speedValue">0.3x</span>
+                            <input type="range" id="speedSlider" min="5" max="30" value="10">
+                            <span class="speed-value" id="speedValue">1.0x</span>
                         </div>
                     </div>
                 </div>
@@ -292,6 +323,9 @@
                     </div>
                 </div>
             </div>
+            </div>
+            <!-- Right Side: Visualization -->
+            <div class="visualization-area">
 
             <div class="stats">
                 <div class="stat">
@@ -381,6 +415,8 @@
             </div>
 
             <div class="step-info" id="stepInfo">Ready to start</div>
+            </div>
+        </div>
         </div>
     </div>
 
@@ -393,14 +429,46 @@
     <script src="visualizer-template.js"></script>
 
     <script>
+        /* ==================== TEST CASES ==================== */
+        const TEST_CASES = [
+            {
+                name: 'Basic Case',
+                description: '<pre style="font-family: monospace; margin: 0; line-height: 1.4; font-size: 12px;">  342\n+ 465\n-----\n  807</pre>',
+                data: { list1: [2, 4, 3], list2: [5, 6, 4] }
+            },
+            {
+                name: 'Different Lengths',
+                description: '<pre style="font-family: monospace; margin: 0; line-height: 1.4; font-size: 12px;">     9\n+ 9999\n------\n 10008</pre>',
+                data: { list1: [9], list2: [9, 9, 9, 9] }
+            },
+            {
+                name: 'Carry Propagation',
+                description: '<pre style="font-family: monospace; margin: 0; line-height: 1.4; font-size: 12px;">  99\n+  1\n----\n 100</pre>',
+                data: { list1: [9, 9], list2: [1] }
+            },
+            {
+                name: 'No Carry',
+                description: '<pre style="font-family: monospace; margin: 0; line-height: 1.4; font-size: 12px;"> 123\n+ 456\n-----\n 579</pre>',
+                data: { list1: [3, 2, 1], list2: [6, 5, 4] }
+            },
+            {
+                name: 'Single Digits',
+                description: '<pre style="font-family: monospace; margin: 0; line-height: 1.4; font-size: 12px;">  5\n+ 7\n---\n 12</pre>',
+                data: { list1: [5], list2: [7] }
+            },
+            {
+                name: 'Larger Numbers',
+                description: '<pre style="font-family: monospace; margin: 0; line-height: 1.4; font-size: 12px;">  9876\n+ 1234\n------\n 11110</pre>',
+                data: { list1: [6, 7, 8, 9], list2: [4, 3, 2, 1] }
+            }
+        ];
+
         // State
         let list1 = [];
         let list2 = [];
         let animationController;
 
         // Elements
-        const list1Input = document.getElementById('list1Input');
-        const list2Input = document.getElementById('list2Input');
         const playBtn = document.getElementById('playBtn');
         const pauseBtn = document.getElementById('pauseBtn');
         const stepBtn = document.getElementById('stepBtn');
@@ -410,16 +478,56 @@
         window.addEventListener('DOMContentLoaded', () => {
             initVisualizer();
 
-            animationController = new AnimationController(speedController);
-            inputValidator.setStatsCallback(runStatsOnly);
+            // Setup test cases
+            testCaseManager.setTestCases(TEST_CASES);
+            testCaseManager.setOnSelectCallback(onTestCaseSelected);
 
-            // Initialize display
-            const initList1 = list1Input.value.split(',').map(n => parseInt(n.trim()));
-            const initList2 = list2Input.value.split(',').map(n => parseInt(n.trim()));
-            createLinkedList('list1Container', initList1);
-            createLinkedList('list2Container', initList2);
+            animationController = new AnimationController(speedController);
+
+            // Initialize display with first test case
+            const firstTestCase = testCaseManager.getTestCaseData();
+            list1 = firstTestCase.list1;
+            list2 = firstTestCase.list2;
+            createLinkedList('list1Container', list1);
+            createLinkedList('list2Container', list2);
             createLinkedList('resultContainer', []);
+            updateNumbers();
+
+            // Setup event listeners
+            setupEventListeners();
         });
+
+        /* ==================== TEST CASE CHANGE ==================== */
+        function loadCurrentTestCase() {
+            const testCase = testCaseManager.getTestCaseData();
+            list1 = testCase.list1;
+            list2 = testCase.list2;
+            createLinkedList('list1Container', list1);
+            createLinkedList('list2Container', list2);
+            createLinkedList('resultContainer', []);
+            updateNumbers();
+            updateOperation('');
+        }
+
+        function updateNumbers() {
+            const num1 = parseInt(list1.slice().reverse().join(''));
+            const num2 = parseInt(list2.slice().reverse().join(''));
+            document.getElementById('num1Display').textContent = num1;
+            document.getElementById('num2Display').textContent = num2;
+            document.getElementById('resultDisplay').textContent = '?';
+        }
+
+        function onTestCaseSelected() {
+            loadCurrentTestCase();
+
+            // Reset controller
+            if (animationController) animationController.reset();
+
+            // Reset button states
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stepBtn.disabled = false;
+        }
 
         // Visualization functions
         function createLinkedList(containerId, values) {
@@ -470,24 +578,6 @@
         }
 
         // Custom validation for two lists
-        function validateLists() {
-            const inputList1 = list1Input.value.split(',').map(n => parseInt(n.trim()));
-            const inputList2 = list2Input.value.split(',').map(n => parseInt(n.trim()));
-
-            if (inputList1.some(isNaN) || inputList2.some(isNaN)) {
-                alert('Please enter valid numbers');
-                return { valid: false };
-            }
-
-            const maxLen = Math.max(inputList1.length, inputList2.length);
-            if (maxLen > INPUT_LIMIT) {
-                inputValidator.modalMessage.innerHTML = `Your lists have up to <strong>${maxLen}</strong> digits, but visualization works best with ≤${INPUT_LIMIT} digits.`;
-                inputValidator.inputModal.classList.add('active');
-                return { valid: false, shouldShowStats: true };
-            }
-
-            return { valid: true, data: [inputList1, inputList2] };
-        }
 
         // Algorithm generator
         function* addTwoNumbersGenerator() {
@@ -599,132 +689,73 @@
         }
 
         // Stats only mode
-        async function runStatsOnly() {
-            list1 = list1Input.value.split(',').map(n => parseInt(n.trim()));
-            list2 = list2Input.value.split(',').map(n => parseInt(n.trim()));
 
-            playBtn.disabled = true;
-            pauseBtn.disabled = true;
-
-            // Calculate result
-            let carry = 0;
-            let result = [];
-            let operations = 0;
-
-            const maxLen = Math.max(list1.length, list2.length);
-            for (let i = 0; i < maxLen || carry > 0; i++) {
-                operations++;
-                const val1 = i < list1.length ? list1[i] : 0;
-                const val2 = i < list2.length ? list2[i] : 0;
-                const total = val1 + val2 + carry;
-                carry = Math.floor(total / 10);
-                result.push(total % 10);
-            }
-
-            // Display results
-            const num1 = parseInt([...list1].reverse().join('')) || 0;
-            const num2 = parseInt([...list2].reverse().join('')) || 0;
-            const resultNum = parseInt([...result].reverse().join('')) || 0;
-
-            const statsHtml = `
-                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 8px;">
-                    <h3 style="color: #166534; margin-bottom: 12px;">📊 Addition Statistics</h3>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Number 1:</strong> ${num1}</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Number 2:</strong> ${num2}</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Result:</strong> ${resultNum}</p>
-                    <hr style="border: none; border-top: 1px solid #86efac; margin: 12px 0;">
-                    <p style="color: #15803d; margin: 8px 0;"><strong>List 1 length:</strong> ${list1.length} digits</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>List 2 length:</strong> ${list2.length} digits</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Operations:</strong> ${operations} iterations (O(n))</p>
-                </div>
-            `;
-
-            document.getElementById('resultDisplay').textContent = resultNum;
-            document.getElementById('stepInfo').innerHTML = statsHtml;
-
-            playBtn.disabled = false;
-        }
-
-        // Button handlers
-        playBtn.addEventListener('click', async () => {
+        /* ==================== EVENT LISTENERS ==================== */
+        function setupEventListeners() {
+            // Button handlers
+            playBtn.addEventListener('click', async () => {
             if (animationController.isRunning && animationController.isPaused) {
                 animationController.resume();
                 playBtn.disabled = true;
                 pauseBtn.disabled = false;
                 stepBtn.disabled = true;
                 await animationController.continue();
-            } else if (!animationController.isRunning) {
-                const validation = validateLists();
-                if (!validation.valid) return;
 
-                list1 = validation.data[0];
-                list2 = validation.data[1];
+                // Return to initial state when complete
+                if (!animationController.isPaused) {
+                    playBtn.disabled = false;
+                    pauseBtn.disabled = true;
+                    stepBtn.disabled = false;
+                }
+            } else if (!animationController.isRunning) {
+                loadCurrentTestCase();
 
                 playBtn.disabled = true;
                 pauseBtn.disabled = false;
                 stepBtn.disabled = true;
 
-                // Display numbers
-                const num1 = parseInt([...list1].reverse().join(''));
-                const num2 = parseInt([...list2].reverse().join(''));
-                document.getElementById('num1Display').textContent = num1;
-                document.getElementById('num2Display').textContent = num2;
-
-                createLinkedList('list1Container', list1);
-                createLinkedList('list2Container', list2);
-                createLinkedList('resultContainer', []);
-
                 await animationController.start(addTwoNumbersGenerator, false);
 
-                playBtn.disabled = true;
-                pauseBtn.disabled = true;
-                stepBtn.disabled = true;
+                // Return to initial state when complete
+                if (!animationController.isPaused) {
+                    playBtn.disabled = false;
+                    pauseBtn.disabled = true;
+                    stepBtn.disabled = false;
+                }
             }
         });
 
-        pauseBtn.addEventListener('click', () => {
+            pauseBtn.addEventListener('click', () => {
             animationController.pause();
             playBtn.disabled = false;
             pauseBtn.disabled = true;
             stepBtn.disabled = false;
         });
 
-        stepBtn.addEventListener('click', async () => {
+            stepBtn.addEventListener('click', async () => {
             if (!animationController.isRunning) {
-                const validation = validateLists();
-                if (!validation.valid) return;
-
-                list1 = validation.data[0];
-                list2 = validation.data[1];
+                loadCurrentTestCase();
 
                 playBtn.disabled = false;
                 pauseBtn.disabled = true;
                 stepBtn.disabled = false;
 
-                // Display numbers
-                const num1 = parseInt([...list1].reverse().join(''));
-                const num2 = parseInt([...list2].reverse().join(''));
-                document.getElementById('num1Display').textContent = num1;
-                document.getElementById('num2Display').textContent = num2;
-
-                createLinkedList('list1Container', list1);
-                createLinkedList('list2Container', list2);
-                createLinkedList('resultContainer', []);
-
                 await animationController.start(addTwoNumbersGenerator, true);
-            } else {
+            } else if (animationController.isPaused) {
                 const complete = await animationController.step();
                 if (complete) {
-                    playBtn.disabled = true;
+                    // Animation complete - return to initial state
+                    playBtn.disabled = false;
                     pauseBtn.disabled = true;
-                    stepBtn.disabled = true;
+                    stepBtn.disabled = false;
                 }
             }
         });
 
-        resetBtn.addEventListener('click', () => {
-            location.reload();
-        });
+            resetBtn.addEventListener('click', () => {
+                location.reload();
+            });
+        }
     </script>
 </body>
 </html>
