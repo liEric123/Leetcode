@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two Sum Visualizer - LeetCode #1</title>
+    <title>LeetCode #1: Two Sum - Visualizer</title>
     <!-- Shared styles -->
     <link rel="stylesheet" href="visualizer-template.css">
     <style>
@@ -11,21 +11,41 @@
 
         /* Container adjustment for side-by-side view */
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
+        }
+
+        /* Main Layout: Side-by-Side */
+        .main-layout {
+            display: flex;
+            gap: 6px;
+            align-items: flex-start;
+        }
+
+        .controls-sidebar {
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .visualization-area {
+            flex: 1;
+            min-width: 0;
         }
 
         /* View controls */
         .view-controls {
             display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 3px;
         }
 
         .view-controls button {
-            padding: 8px 16px;
-            height: 36px;
-            font-size: 13px;
+            padding: 5px 8px;
+            height: auto;
+            font-size: 10px;
+            width: 100%;
+            justify-content: center;
         }
 
         .view-controls button.active {
@@ -37,8 +57,8 @@
         .algorithms {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 30px;
+            gap: 6px;
+            margin-bottom: 4px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             align-items: start;
         }
@@ -148,17 +168,17 @@
         }
 
         .array-item {
-            width: 65px;
-            height: 65px;
+            width: 38px;
+            height: 38px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: white;
-            border: 3px solid #cbd5e0;
-            border-radius: 10px;
+            border: 2px solid #cbd5e0;
+            border-radius: 4px;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 13px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -173,44 +193,59 @@
 
         .array-item .index {
             position: absolute;
-            top: -22px;
-            font-size: 11px;
-            color: #a0aec0;
+            top: -14px;
+            font-size: 8px;
+            color: #64748b;
             font-weight: 600;
             background: #f7fafc;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 3px;
+            border-radius: 2px;
+        }
+
+        body.dark-mode .array-item .index {
+            color: #cbd5e0;
+            background: #1a202c;
         }
 
         .array-item.checking {
             border-color: #f6ad55;
             background: #fffaf0;
-            transform: scale(1.08);
-            box-shadow: 0 4px 12px rgba(246, 173, 85, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(246, 173, 85, 0.3);
+        }
+
+        body.dark-mode .array-item.checking {
+            background: #744210;
+            border-color: #f6ad55;
         }
 
         .array-item.current {
             border-color: #4299e1;
             background: #ebf8ff;
-            transform: scale(1.08);
-            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
+        }
+
+        body.dark-mode .array-item.current {
+            background: #2c5282;
+            border-color: #63b3ed;
         }
 
         .array-item.found {
             border-color: #48bb78;
             background: #48bb78;
             color: white;
-            transform: scale(1.12);
-            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.5);
         }
 
         .hash-map-display {
             background: white;
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 16px;
-            height: 130px;
-            margin-bottom: 20px;
+            border-radius: 3px;
+            padding: 4px;
+            height: 70px;
+            margin-bottom: 4px;
             overflow-y: auto;
             transition: all 0.3s ease;
         }
@@ -221,12 +256,12 @@
         }
 
         .hash-map-display h3 {
-            font-size: 12px;
+            font-size: 9px;
             color: #64748b;
-            margin-bottom: 12px;
+            margin-bottom: 3px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
 
         body.dark-mode .hash-map-display h3 {
@@ -236,19 +271,25 @@
         .hash-entries {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 2px;
         }
 
         .hash-entry {
-            padding: 8px 14px;
+            padding: 2px 5px;
             background: #ebf8ff;
-            border: 2px solid #4299e1;
-            border-radius: 8px;
-            font-size: 14px;
+            border: 1px solid #4299e1;
+            border-radius: 3px;
+            font-size: 9px;
             font-weight: 600;
             font-family: 'SF Mono', Monaco, monospace;
             animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             color: #2c5282;
+        }
+
+        body.dark-mode .hash-entry {
+            background: #2c5282;
+            border-color: #63b3ed;
+            color: #e2e8f0;
         }
 
         @keyframes slideIn {
@@ -322,21 +363,9 @@
 </head>
 <body>
     <div class="container">
-        <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
-        <h1>Two Sum Algorithm Visualizer</h1>
-        <p class="subtitle">Compare brute force and hash map approaches side by side</p>
-
-        <!-- Input Limit Modal -->
-        <div class="modal-overlay" id="inputModal">
-            <div class="modal">
-                <h2>⚠️ Input Too Large</h2>
-                <p id="modalMessage"></p>
-                <div class="modal-buttons">
-                    <button class="primary" id="modalReduceBtn">Reduce Input</button>
-                    <button class="secondary" id="modalStatsBtn">Show Stats Only</button>
-                </div>
-            </div>
-        </div>
+        <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle dark mode">🌙</button>
+        <h1>LeetCode #1: Two Sum</h1>
+        <p class="subtitle">Find two numbers in an array that add up to a target value</p>
 
         <!-- YouTube Video Section -->
         <div class="video-section">
@@ -361,26 +390,24 @@
 
         <!-- Interactive Visualizer Section -->
         <div class="visualizer-section">
-            <div class="visualizer-header">
-                <h2>Interactive Two Sum Visualizer</h2>
-                <p>Step through the algorithms and see how they work in real-time</p>
-            </div>
+        <!-- Main Layout: Controls + Visualization Side-by-Side -->
+        <div class="main-layout">
+            <!-- Left Sidebar: Controls -->
+            <div class="controls-sidebar">
+        <!-- Test Case Selector -->
+        <div class="test-case-section">
+            <label class="test-case-label">Select Test Case</label>
+            <div id="testCaseSelector"></div>
+            <div id="testCaseDescription">Select a test case to visualize the algorithm</div>
+        </div>
 
         <div class="controls">
             <div class="controls-row">
-                <div class="input-group">
-                    <label>Array</label>
-                    <input type="text" id="arrayInput" value="2,7,11,15" placeholder="e.g., 2,7,11,15">
-                </div>
-                <div class="input-group">
-                    <label>Target</label>
-                    <input type="number" id="targetInput" value="9" placeholder="e.g., 9">
-                </div>
                 <div class="speed-control">
                     <label>Animation Speed</label>
                     <div class="slider-container">
-                        <input type="range" id="speedSlider" min="1" max="20" value="3">
-                        <span class="speed-value" id="speedValue">0.3x</span>
+                        <input type="range" id="speedSlider" min="5" max="30" value="10">
+                        <span class="speed-value" id="speedValue">1.0x</span>
                     </div>
                 </div>
             </div>
@@ -398,7 +425,9 @@
             <button id="viewBruteBtn" class="outline">Focus Brute Force</button>
             <button id="viewHashBtn" class="outline">Focus Hash Map</button>
         </div>
-
+            </div>
+            <!-- Right Side: Visualization -->
+            <div class="visualization-area">
         <div class="algorithms" id="algorithmsContainer">
             <!-- Brute Force -->
             <div class="algorithm brute-force">
@@ -504,6 +533,9 @@
 
         <div class="result" id="result"></div>
         </div>
+            </div>
+        </div>
+        </div>
     </div>
 
     <!-- Problem-specific JavaScript -->
@@ -516,6 +548,40 @@
 
     <script>
 
+        /* ==================== TEST CASES ==================== */
+        const TEST_CASES = [
+            {
+                name: 'Basic Case',
+                description: '<code>nums = [2, 7, 11, 15]<br>target = 9</code>',
+                data: { nums: [2, 7, 11, 15], target: 9 }
+            },
+            {
+                name: 'Middle Solution',
+                description: '<code>nums = [3, 2, 4]<br>target = 6</code>',
+                data: { nums: [3, 2, 4], target: 6 }
+            },
+            {
+                name: 'End Solution',
+                description: '<code>nums = [1, 5, 3, 7, 9, 2]<br>target = 11</code>',
+                data: { nums: [1, 5, 3, 7, 9, 2], target: 11 }
+            },
+            {
+                name: 'Negative Numbers',
+                description: '<code>nums = [-3, 4, 3, 90]<br>target = 0</code>',
+                data: { nums: [-3, 4, 3, 90], target: 0 }
+            },
+            {
+                name: 'Large Array',
+                description: '<code>nums = [5, 2, 8, 15, 1, 7, 12, 4, 9, 3, 11, 6]<br>target = 17</code>',
+                data: { nums: [5, 2, 8, 15, 1, 7, 12, 4, 9, 3, 11, 6], target: 17 }
+            },
+            {
+                name: 'Duplicates',
+                description: '<code>nums = [3, 3]<br>target = 6</code>',
+                data: { nums: [3, 3], target: 6 }
+            }
+        ];
+
         // State
         let nums = [];
         let target = 0;
@@ -523,8 +589,6 @@
         let hashAnimController;
 
         // Elements
-        const arrayInput = document.getElementById('arrayInput');
-        const targetInput = document.getElementById('targetInput');
         const playBothBtn = document.getElementById('playBothBtn');
         const pauseBothBtn = document.getElementById('pauseBothBtn');
         const resetBtn = document.getElementById('resetBtn');
@@ -550,16 +614,49 @@
         window.addEventListener('DOMContentLoaded', () => {
             initVisualizer();
 
+            // Setup test cases
+            testCaseManager.setTestCases(TEST_CASES);
+            testCaseManager.setOnSelectCallback(onTestCaseSelected);
+
             bruteAnimController = new AnimationController(speedController);
             hashAnimController = new AnimationController(speedController);
 
-            inputValidator.setStatsCallback(runStatsOnly);
+            // Initialize display with first test case
+            const firstTestCase = testCaseManager.getTestCaseData();
+            nums = firstTestCase.nums;
+            target = firstTestCase.target;
+            createArrayDisplay('bruteArray', nums);
+            createArrayDisplay('hashArray', nums);
 
-            // Initialize display
-            const initNums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
-            createArrayDisplay('bruteArray', initNums);
-            createArrayDisplay('hashArray', initNums);
+            // Set up all button event listeners
+            setupEventListeners();
+
+            // Initialize button states
+            syncButtonStates();
         });
+
+        /* ==================== TEST CASE CHANGE ==================== */
+        function loadCurrentTestCase() {
+            const testCase = testCaseManager.getTestCaseData();
+            nums = testCase.nums;
+            target = testCase.target;
+            createArrayDisplay('bruteArray', nums);
+            createArrayDisplay('hashArray', nums);
+
+            // Reset result
+            result.classList.remove('show');
+        }
+
+        function onTestCaseSelected() {
+            loadCurrentTestCase();
+
+            // Reset both controllers
+            if (bruteAnimController) bruteAnimController.reset();
+            if (hashAnimController) hashAnimController.reset();
+
+            // Sync button states
+            syncButtonStates();
+        }
 
         // Visualization functions
         function createArrayDisplay(containerId, values) {
@@ -694,57 +791,6 @@
         }
 
         // Stats only mode
-        async function runStatsOnly() {
-            nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
-            target = parseInt(targetInput.value);
-
-            playBothBtn.disabled = true;
-            pauseBothBtn.disabled = true;
-            result.classList.remove('show');
-
-            // Run brute force stats
-            let bruteComparisons = 0;
-            let bruteResult = null;
-            for (let i = 0; i < nums.length; i++) {
-                for (let j = i + 1; j < nums.length; j++) {
-                    bruteComparisons++;
-                    if (nums[i] + nums[j] === target) {
-                        bruteResult = [i, j];
-                        break;
-                    }
-                }
-                if (bruteResult) break;
-            }
-
-            // Run hash map stats
-            let hashLookups = 0;
-            let hashResult = null;
-            const hashMap = new Map();
-            for (let i = 0; i < nums.length; i++) {
-                hashLookups++;
-                if (hashMap.has(target - nums[i])) {
-                    hashResult = [hashMap.get(target - nums[i]), i];
-                    break;
-                }
-                hashMap.set(nums[i], i);
-            }
-
-            // Display results
-            const statsHtml = `
-                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 8px;">
-                    <h3 style="color: #166534; margin-bottom: 12px;">📊 Algorithm Statistics</h3>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Input size:</strong> ${nums.length} items</p>
-                    <hr style="border: none; border-top: 1px solid #86efac; margin: 12px 0;">
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Brute Force O(n²):</strong> ${bruteComparisons} comparisons ${bruteResult ? `→ Found at [${bruteResult[0]}, ${bruteResult[1]}]` : '→ No solution found'}</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Hash Map O(n):</strong> ${hashLookups} lookups ${hashResult ? `→ Found at [${hashResult[0]}, ${hashResult[1]}]` : '→ No solution found'}</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Speedup:</strong> ${(bruteComparisons / hashLookups).toFixed(1)}x faster with hash map</p>
-                </div>
-            `;
-            result.innerHTML = statsHtml;
-            result.classList.add('show');
-
-            playBothBtn.disabled = false;
-        }
 
         // View controls
         viewBothBtn.addEventListener('click', () => {
@@ -768,164 +814,228 @@
             viewHashBtn.classList.add('active');
         });
 
-        // Reset button
-        resetBtn.addEventListener('click', () => {
-            location.reload();
-        });
+        /* ==================== RESET FUNCTIONS ==================== */
+        function resetBruteForce() {
+            // Reset controller
+            if (bruteAnimController) bruteAnimController.reset();
 
-        // Play both
-        playBothBtn.addEventListener('click', async () => {
-            if (bruteAnimController.isRunning && bruteAnimController.isPaused &&
-                hashAnimController.isRunning && hashAnimController.isPaused) {
-                bruteAnimController.resume();
-                hashAnimController.resume();
-                playBothBtn.disabled = true;
-                pauseBothBtn.disabled = false;
+            // Reset display
+            loadCurrentTestCase();
 
-                Promise.all([bruteAnimController.continue(), hashAnimController.continue()]);
-            } else if (!bruteAnimController.isRunning && !hashAnimController.isRunning) {
-                const validation = inputValidator.validateArray(arrayInput.value);
-                if (!validation.valid) return;
+            // Clear all highlighting
+            document.querySelectorAll('#bruteArray .array-item').forEach(item => {
+                item.classList.remove('current', 'checking', 'found');
+            });
 
-                nums = validation.data;
-                target = parseInt(targetInput.value);
+            // Reset stats
+            document.getElementById('bruteComparisons').textContent = '0';
 
-                playBothBtn.disabled = true;
-                pauseBothBtn.disabled = false;
-                result.classList.remove('show');
+            // Reset step info
+            uiUpdater.updateStepInfo('bruteStep', 'Ready to start');
 
-                createArrayDisplay('bruteArray', nums);
-                createArrayDisplay('hashArray', nums);
+            // Clear code highlighting
+            codeHighlighter.highlightCode('bruteCode', null);
 
-                Promise.all([
-                    bruteAnimController.start(bruteForceGenerator, false),
-                    hashAnimController.start(hashMapGenerator, false)
-                ]).then(() => {
-                    playBothBtn.disabled = true;
-                    pauseBothBtn.disabled = true;
-                });
-            }
-        });
+            // Sync button states
+            syncButtonStates();
+        }
 
-        // Pause both
-        pauseBothBtn.addEventListener('click', () => {
-            bruteAnimController.pause();
-            hashAnimController.pause();
-            playBothBtn.disabled = false;
-            pauseBothBtn.disabled = true;
-        });
+        function resetHashMap() {
+            // Reset controller
+            if (hashAnimController) hashAnimController.reset();
 
-        // Individual algorithm controls - Brute Force
-        brutePlayBtn.addEventListener('click', async () => {
-            if (bruteAnimController.isRunning && bruteAnimController.isPaused) {
-                bruteAnimController.resume();
+            // Reset display
+            loadCurrentTestCase();
+
+            // Clear all highlighting
+            document.querySelectorAll('#hashArray .array-item').forEach(item => {
+                item.classList.remove('current', 'checking', 'found');
+            });
+
+            // Clear hash map entries
+            document.getElementById('hashEntries').innerHTML = '';
+
+            // Reset stats
+            document.getElementById('hashLookups').textContent = '0';
+
+            // Reset step info
+            uiUpdater.updateStepInfo('hashStep', 'Ready to start');
+
+            // Clear code highlighting
+            codeHighlighter.highlightCode('hashCode', null);
+
+            // Sync button states
+            syncButtonStates();
+        }
+
+        /* ==================== BUTTON SYNCHRONIZATION ==================== */
+        function syncButtonStates() {
+            // Update individual buttons based on their controller states
+            // Brute Force
+            if (bruteAnimController.isRunning && !bruteAnimController.isPaused) {
                 brutePlayBtn.disabled = true;
                 brutePauseBtn.disabled = false;
-                await bruteAnimController.continue();
-            } else if (!bruteAnimController.isRunning) {
-                const validation = inputValidator.validateArray(arrayInput.value);
-                if (!validation.valid) return;
-
-                nums = validation.data;
-                target = parseInt(targetInput.value);
-
-                brutePlayBtn.disabled = true;
-                brutePauseBtn.disabled = false;
-                createArrayDisplay('bruteArray', nums);
-
-                await bruteAnimController.start(bruteForceGenerator, false);
-                brutePlayBtn.disabled = true;
+                bruteStepBtn.disabled = true;
+            } else if (bruteAnimController.isRunning && bruteAnimController.isPaused) {
+                brutePlayBtn.disabled = false;
                 brutePauseBtn.disabled = true;
-            }
-        });
-
-        brutePauseBtn.addEventListener('click', () => {
-            bruteAnimController.pause();
-            brutePlayBtn.disabled = false;
-            brutePauseBtn.disabled = true;
-            bruteStepBtn.disabled = false;
-        });
-
-        bruteStepBtn.addEventListener('click', async () => {
-            if (!bruteAnimController.isRunning) {
-                const validation = inputValidator.validateArray(arrayInput.value);
-                if (!validation.valid) return;
-
-                nums = validation.data;
-                target = parseInt(targetInput.value);
-                createArrayDisplay('bruteArray', nums);
-
-                await bruteAnimController.start(bruteForceGenerator, true);
+                bruteStepBtn.disabled = false;
             } else {
-                const complete = await bruteAnimController.step();
-                if (complete) {
-                    brutePlayBtn.disabled = true;
-                    brutePauseBtn.disabled = true;
-                    bruteStepBtn.disabled = true;
-                }
+                brutePlayBtn.disabled = false;
+                brutePauseBtn.disabled = true;
+                bruteStepBtn.disabled = false;
             }
-        });
 
-        bruteResetBtn.addEventListener('click', () => {
-            location.reload();
-        });
-
-        // Individual algorithm controls - Hash Map
-        hashPlayBtn.addEventListener('click', async () => {
-            if (hashAnimController.isRunning && hashAnimController.isPaused) {
-                hashAnimController.resume();
+            // Hash Map
+            if (hashAnimController.isRunning && !hashAnimController.isPaused) {
                 hashPlayBtn.disabled = true;
                 hashPauseBtn.disabled = false;
-                await hashAnimController.continue();
-            } else if (!hashAnimController.isRunning) {
-                const validation = inputValidator.validateArray(arrayInput.value);
-                if (!validation.valid) return;
-
-                nums = validation.data;
-                target = parseInt(targetInput.value);
-
-                hashPlayBtn.disabled = true;
-                hashPauseBtn.disabled = false;
-                createArrayDisplay('hashArray', nums);
-                document.getElementById('hashEntries').innerHTML = '';
-
-                await hashAnimController.start(hashMapGenerator, false);
-                hashPlayBtn.disabled = true;
+                hashStepBtn.disabled = true;
+            } else if (hashAnimController.isRunning && hashAnimController.isPaused) {
+                hashPlayBtn.disabled = false;
                 hashPauseBtn.disabled = true;
-            }
-        });
-
-        hashPauseBtn.addEventListener('click', () => {
-            hashAnimController.pause();
-            hashPlayBtn.disabled = false;
-            hashPauseBtn.disabled = true;
-            hashStepBtn.disabled = false;
-        });
-
-        hashStepBtn.addEventListener('click', async () => {
-            if (!hashAnimController.isRunning) {
-                const validation = inputValidator.validateArray(arrayInput.value);
-                if (!validation.valid) return;
-
-                nums = validation.data;
-                target = parseInt(targetInput.value);
-                createArrayDisplay('hashArray', nums);
-                document.getElementById('hashEntries').innerHTML = '';
-
-                await hashAnimController.start(hashMapGenerator, true);
+                hashStepBtn.disabled = false;
             } else {
-                const complete = await hashAnimController.step();
-                if (complete) {
-                    hashPlayBtn.disabled = true;
-                    hashPauseBtn.disabled = true;
-                    hashStepBtn.disabled = true;
-                }
+                hashPlayBtn.disabled = false;
+                hashPauseBtn.disabled = true;
+                hashStepBtn.disabled = false;
             }
-        });
 
-        hashResetBtn.addEventListener('click', () => {
-            location.reload();
-        });
+            // Update global buttons
+            const bothRunning = bruteAnimController.isRunning && hashAnimController.isRunning;
+            const bothPaused = bruteAnimController.isPaused && hashAnimController.isPaused;
+            const bothNotRunning = !bruteAnimController.isRunning && !hashAnimController.isRunning;
+
+            if (bothRunning && !bothPaused) {
+                playBothBtn.disabled = true;
+                pauseBothBtn.disabled = false;
+            } else if (bothRunning && bothPaused) {
+                playBothBtn.disabled = false;
+                pauseBothBtn.disabled = true;
+            } else {
+                playBothBtn.disabled = false;
+                pauseBothBtn.disabled = true;
+            }
+        }
+
+        /* ==================== EVENT LISTENERS ==================== */
+        function setupEventListeners() {
+            // Reset button - all reset buttons do the same thing
+            resetBtn.addEventListener('click', () => {
+                location.reload();
+            });
+
+            // Play both
+            playBothBtn.addEventListener('click', async () => {
+                if (bruteAnimController.isRunning && bruteAnimController.isPaused &&
+                    hashAnimController.isRunning && hashAnimController.isPaused) {
+                    // Resume from pause
+                    bruteAnimController.resume();
+                    hashAnimController.resume();
+                    syncButtonStates();
+
+                    await Promise.all([bruteAnimController.continue(), hashAnimController.continue()]);
+                    syncButtonStates();
+                } else if (!bruteAnimController.isRunning && !hashAnimController.isRunning) {
+                    loadCurrentTestCase();
+                    result.classList.remove('show');
+
+                    const startPromises = Promise.all([
+                        bruteAnimController.start(bruteForceGenerator, false),
+                        hashAnimController.start(hashMapGenerator, false)
+                    ]);
+
+                    // Sync immediately after start() sets isRunning=true
+                    syncButtonStates();
+
+                    await startPromises;
+                    syncButtonStates();
+                }
+            });
+
+            // Pause both
+            pauseBothBtn.addEventListener('click', () => {
+                bruteAnimController.pause();
+                hashAnimController.pause();
+                syncButtonStates();
+            });
+
+            // Individual algorithm controls - Brute Force
+            brutePlayBtn.addEventListener('click', async () => {
+                if (bruteAnimController.isRunning && bruteAnimController.isPaused) {
+                    bruteAnimController.resume();
+                    syncButtonStates();
+                    await bruteAnimController.continue();
+                    syncButtonStates();
+                } else if (!bruteAnimController.isRunning) {
+                    loadCurrentTestCase();
+                    const startPromise = bruteAnimController.start(bruteForceGenerator, false);
+                    syncButtonStates();
+                    await startPromise;
+                    syncButtonStates();
+                }
+            });
+
+            brutePauseBtn.addEventListener('click', () => {
+                bruteAnimController.pause();
+                syncButtonStates();
+            });
+
+            bruteStepBtn.addEventListener('click', async () => {
+                if (!bruteAnimController.isRunning) {
+                    loadCurrentTestCase();
+                    const startPromise = bruteAnimController.start(bruteForceGenerator, true);
+                    syncButtonStates();
+                    await startPromise;
+                } else if (bruteAnimController.isPaused) {
+                    await bruteAnimController.step();
+                    syncButtonStates();
+                }
+            });
+
+            bruteResetBtn.addEventListener('click', () => {
+                resetBruteForce();
+            });
+
+            // Individual algorithm controls - Hash Map
+            hashPlayBtn.addEventListener('click', async () => {
+                if (hashAnimController.isRunning && hashAnimController.isPaused) {
+                    hashAnimController.resume();
+                    syncButtonStates();
+                    await hashAnimController.continue();
+                    syncButtonStates();
+                } else if (!hashAnimController.isRunning) {
+                    loadCurrentTestCase();
+                    document.getElementById('hashEntries').innerHTML = '';
+                    const startPromise = hashAnimController.start(hashMapGenerator, false);
+                    syncButtonStates();
+                    await startPromise;
+                    syncButtonStates();
+                }
+            });
+
+            hashPauseBtn.addEventListener('click', () => {
+                hashAnimController.pause();
+                syncButtonStates();
+            });
+
+            hashStepBtn.addEventListener('click', async () => {
+                if (!hashAnimController.isRunning) {
+                    loadCurrentTestCase();
+                    document.getElementById('hashEntries').innerHTML = '';
+                    const startPromise = hashAnimController.start(hashMapGenerator, true);
+                    syncButtonStates();
+                    await startPromise;
+                } else if (hashAnimController.isPaused) {
+                    await hashAnimController.step();
+                    syncButtonStates();
+                }
+            });
+
+            hashResetBtn.addEventListener('click', () => {
+                resetHashMap();
+            });
+        }
     </script>
 </body>
 </html>

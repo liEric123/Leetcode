@@ -32,6 +32,8 @@ class DarkModeManager {
     }
 
     init() {
+        if (!this.toggle) return; // Exit if toggle button doesn't exist
+
         // Check for saved preference
         const isDarkMode = localStorage.getItem(this.storageKey) === 'true';
         if (isDarkMode) {
@@ -138,6 +140,79 @@ class VideoManager {
     }
 }
 
+/* ==================== TEST CASE MANAGER ==================== */
+
+class TestCaseManager {
+    constructor() {
+        this.testCases = [];
+        this.currentTestCase = 0;
+        this.testCaseContainer = document.getElementById('testCaseSelector');
+        this.testCaseDescription = document.getElementById('testCaseDescription');
+        this.onSelectCallback = null;
+    }
+
+    setTestCases(testCases) {
+        this.testCases = testCases;
+        this.currentTestCase = 0;
+        this.renderTestCaseButtons();
+        this.updateDescription();
+    }
+
+    setOnSelectCallback(callback) {
+        this.onSelectCallback = callback;
+    }
+
+    renderTestCaseButtons() {
+        if (!this.testCaseContainer) return;
+
+        this.testCaseContainer.innerHTML = '';
+        this.testCases.forEach((testCase, index) => {
+            const button = document.createElement('button');
+            button.className = 'test-case-btn' + (index === 0 ? ' active' : '');
+            button.textContent = testCase.name;
+            button.addEventListener('click', () => this.selectTestCase(index));
+            this.testCaseContainer.appendChild(button);
+        });
+    }
+
+    selectTestCase(index) {
+        this.currentTestCase = index;
+
+        // Update button states
+        const buttons = this.testCaseContainer.querySelectorAll('.test-case-btn');
+        buttons.forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === index);
+        });
+
+        this.updateDescription();
+
+        // Call the callback if set
+        if (this.onSelectCallback) {
+            this.onSelectCallback();
+        }
+    }
+
+    updateDescription() {
+        if (this.testCaseDescription && this.testCases[this.currentTestCase]) {
+            const desc = this.testCases[this.currentTestCase].description;
+            // Check if description contains HTML
+            if (desc.includes('<')) {
+                this.testCaseDescription.innerHTML = desc;
+            } else {
+                this.testCaseDescription.textContent = desc;
+            }
+        }
+    }
+
+    getCurrentTestCase() {
+        return this.testCases[this.currentTestCase];
+    }
+
+    getTestCaseData() {
+        return this.getCurrentTestCase().data;
+    }
+}
+
 /* ==================== INPUT VALIDATION ==================== */
 
 class InputValidator {
@@ -150,11 +225,15 @@ class InputValidator {
     }
 
     init() {
-        this.modalReduceBtn.addEventListener('click', () => this.closeModal());
+        if (this.modalReduceBtn) {
+            this.modalReduceBtn.addEventListener('click', () => this.closeModal());
+        }
     }
 
     closeModal() {
-        this.inputModal.classList.remove('active');
+        if (this.inputModal) {
+            this.inputModal.classList.remove('active');
+        }
     }
 
     validateArray(inputValue, inputLimit = INPUT_LIMIT) {
@@ -184,10 +263,12 @@ class InputValidator {
     }
 
     setStatsCallback(callback) {
-        this.modalStatsBtn.addEventListener('click', async () => {
-            this.closeModal();
-            await callback();
-        });
+        if (this.modalStatsBtn) {
+            this.modalStatsBtn.addEventListener('click', async () => {
+                this.closeModal();
+                await callback();
+            });
+        }
     }
 }
 
@@ -197,15 +278,28 @@ class SpeedController {
     constructor() {
         this.speedSlider = document.getElementById('speedSlider');
         this.speedValue = document.getElementById('speedValue');
-        this.speed = 0.3;
+        this.speed = 1.0;
+        this.storageKey = 'visualizerSpeed';
         this.init();
     }
 
     init() {
+        if (!this.speedSlider || !this.speedValue) return; // Exit if elements don't exist
+
+        // Restore saved speed
+        const savedSpeed = localStorage.getItem(this.storageKey);
+        if (savedSpeed) {
+            this.speed = parseFloat(savedSpeed);
+            this.speedSlider.value = this.speed * 10;
+            this.speedValue.textContent = this.speed.toFixed(1) + 'x';
+        }
+
         this.speedSlider.addEventListener('input', (e) => {
             const val = parseInt(e.target.value);
             this.speed = val / 10;
             this.speedValue.textContent = this.speed.toFixed(1) + 'x';
+            // Save to localStorage
+            localStorage.setItem(this.storageKey, this.speed);
         });
     }
 
@@ -394,6 +488,7 @@ let inputValidator;
 let speedController;
 let codeHighlighter;
 let uiUpdater;
+let testCaseManager;
 
 /* ==================== INITIALIZATION ==================== */
 
@@ -405,6 +500,7 @@ function initVisualizer() {
     speedController = new SpeedController();
     codeHighlighter = new CodeHighlighter();
     uiUpdater = new UIUpdater();
+    testCaseManager = new TestCaseManager();
 
     // Setup language toggle
     codeHighlighter.setupLanguageToggle();
@@ -423,6 +519,7 @@ window.VisualizerTemplate = {
     CodeHighlighter,
     AnimationController,
     UIUpdater,
+    TestCaseManager,
     initVisualizer,
     sleep,
     formatNumber

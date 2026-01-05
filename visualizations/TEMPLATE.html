@@ -95,18 +95,6 @@
         <h1>[Icon] [Problem Name] Visualizer</h1>
         <p class="subtitle">LeetCode #[Number] - [Brief Description]</p>
 
-        <!-- Input Limit Modal (required) -->
-        <div class="modal-overlay" id="inputModal">
-            <div class="modal">
-                <h2>⚠️ Input Too Large</h2>
-                <p id="modalMessage"></p>
-                <div class="modal-buttons">
-                    <button class="primary" id="modalReduceBtn">Reduce Input</button>
-                    <button class="secondary" id="modalStatsBtn">Show Stats Only</button>
-                </div>
-            </div>
-        </div>
-
         <!-- YouTube Video Section (optional but recommended) -->
         <div class="video-section">
             <div class="video-header">
@@ -136,17 +124,16 @@
                 <p>Step through the algorithm and see how it works in real-time</p>
             </div>
 
+            <!-- Test Case Selector -->
+            <div class="test-case-section">
+                <label class="test-case-label">Select Test Case</label>
+                <div id="testCaseSelector"></div>
+                <div id="testCaseDescription">Select a test case to visualize the algorithm</div>
+            </div>
+
             <!-- Controls -->
             <div class="controls">
                 <div class="controls-row">
-                    <div class="input-group">
-                        <label>Array</label>
-                        <input type="text" id="arrayInput" value="2,7,11,15" placeholder="e.g., 2,7,11,15">
-                    </div>
-                    <div class="input-group">
-                        <label>Target</label>
-                        <input type="number" id="targetInput" value="9" placeholder="e.g., 9">
-                    </div>
                     <div class="speed-control">
                         <label>Animation Speed</label>
                         <div class="slider-container">
@@ -220,14 +207,27 @@
 
     <script>
 
+        /* ==================== TEST CASES ==================== */
+        const TEST_CASES = [
+            {
+                name: 'Basic Case',
+                description: 'Simple example with solution at indices 0 and 1',
+                data: { nums: [2, 7, 11, 15], target: 9 }
+            },
+            {
+                name: 'Edge Case',
+                description: 'Another example case',
+                data: { nums: [3, 2, 4], target: 6 }
+            },
+            // Add more test cases as needed
+        ];
+
         /* ==================== STATE ==================== */
         let nums = [];
         let target = 0;
         let animationController;
 
         /* ==================== ELEMENTS ==================== */
-        const arrayInput = document.getElementById('arrayInput');
-        const targetInput = document.getElementById('targetInput');
         const playBtn = document.getElementById('playBtn');
         const pauseBtn = document.getElementById('pauseBtn');
         const stepBtn = document.getElementById('stepBtn');
@@ -238,16 +238,41 @@
         window.addEventListener('DOMContentLoaded', () => {
             initVisualizer(); // Initialize shared functionality
 
+            // Setup test cases and callback
+            testCaseManager.setTestCases(TEST_CASES);
+            testCaseManager.setOnSelectCallback(onTestCaseSelected);
+
             // Create animation controller
             animationController = new AnimationController(speedController);
 
-            // Setup stats callback for large inputs
-            inputValidator.setStatsCallback(runStatsOnly);
-
-            // Initialize display
-            const initNums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
-            createArrayDisplay(initNums);
+            // Initialize display with first test case
+            const firstTestCase = testCaseManager.getTestCaseData();
+            nums = firstTestCase.nums;
+            target = firstTestCase.target;
+            createArrayDisplay(nums);
         });
+
+        /* ==================== TEST CASE CHANGE ==================== */
+        function loadCurrentTestCase() {
+            const testCase = testCaseManager.getTestCaseData();
+            nums = testCase.nums;
+            target = testCase.target;
+            createArrayDisplay(nums);
+            uiUpdater.updateStat('inputSize', nums.length);
+            uiUpdater.updateStat('operations', 0);
+        }
+
+        function onTestCaseSelected() {
+            loadCurrentTestCase();
+
+            // Reset controller
+            if (animationController) animationController.reset();
+
+            // Reset button states
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stepBtn.disabled = false;
+        }
 
         /* ==================== VISUALIZATION FUNCTIONS ==================== */
 
@@ -296,38 +321,6 @@
             yield;
         }
 
-        /* ==================== STATS ONLY MODE ==================== */
-
-        async function runStatsOnly() {
-            nums = arrayInput.value.split(',').map(n => parseInt(n.trim()));
-            target = parseInt(targetInput.value);
-
-            // Disable buttons
-            playBtn.disabled = true;
-            pauseBtn.disabled = true;
-
-            // Run algorithm without visualization
-            let operations = 0;
-            for (let i = 0; i < nums.length; i++) {
-                operations++;
-                // Your algorithm logic here
-            }
-
-            // Display stats
-            const statsHtml = `
-                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 8px;">
-                    <h3 style="color: #166534; margin-bottom: 12px;">📊 Algorithm Statistics</h3>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Input size:</strong> ${nums.length} items</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Operations:</strong> ${operations}</p>
-                    <p style="color: #15803d; margin: 8px 0;"><strong>Time complexity:</strong> O(n)</p>
-                </div>
-            `;
-            uiUpdater.updateStepInfo('stepInfo', '');
-            document.getElementById('stepInfo').innerHTML = statsHtml;
-
-            // Re-enable buttons
-            playBtn.disabled = false;
-        }
 
         /* ==================== BUTTON HANDLERS ==================== */
 
@@ -341,19 +334,11 @@
                 await animationController.continue();
             } else if (!animationController.isRunning) {
                 // Start new
-                const validation = inputValidator.validateArray(arrayInput.value);
-                if (!validation.valid) return;
-
-                nums = validation.data;
-                target = parseInt(targetInput.value);
+                loadCurrentTestCase();
 
                 playBtn.disabled = true;
                 pauseBtn.disabled = false;
                 stepBtn.disabled = true;
-
-                createArrayDisplay(nums);
-                uiUpdater.updateStat('inputSize', nums.length);
-                uiUpdater.updateStat('operations', 0);
 
                 await animationController.start(algorithmGenerator, false);
 
@@ -374,19 +359,11 @@
         stepBtn.addEventListener('click', async () => {
             if (!animationController.isRunning) {
                 // Start in step mode
-                const validation = inputValidator.validateArray(arrayInput.value);
-                if (!validation.valid) return;
-
-                nums = validation.data;
-                target = parseInt(targetInput.value);
+                loadCurrentTestCase();
 
                 playBtn.disabled = false;
                 pauseBtn.disabled = true;
                 stepBtn.disabled = false;
-
-                createArrayDisplay(nums);
-                uiUpdater.updateStat('inputSize', nums.length);
-                uiUpdater.updateStat('operations', 0);
 
                 await animationController.start(algorithmGenerator, true);
             } else {
