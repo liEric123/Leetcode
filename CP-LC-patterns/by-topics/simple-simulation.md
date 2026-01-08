@@ -1,6 +1,6 @@
 # Simple Simulation
 
-## Beginner-Friendly Problems
+## Highly Similar Problems
 
 ### LC 859 - Buddy Strings
 **Link:** https://leetcode.com/problems/buddy-strings/
