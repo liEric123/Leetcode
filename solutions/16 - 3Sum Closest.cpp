@@ -1,4 +1,10 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <climits>
+#include <cstdlib>
 using namespace std;
 class Solution {
 public:

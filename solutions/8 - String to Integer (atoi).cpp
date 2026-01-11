@@ -1,4 +1,8 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <climits>
+#include <cctype>
 using namespace std;
 class Solution {
 public:
