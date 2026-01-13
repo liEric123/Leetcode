@@ -1,6 +1,6 @@
 # Expand from Center / Enumerate All Ranges
 
-## Highly Similar Problems
+## Collection of Similar Problems (can be done sequentially)
 
 ### LC 647 - Palindromic Substrings
 **Link:** https://leetcode.com/problems/palindromic-substrings/  
