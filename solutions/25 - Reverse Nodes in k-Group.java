@@ -89,5 +89,6 @@ class Solution {
             curr = curr.next;
         }
         System.out.println();
+        sc.close();
     }    
 }
