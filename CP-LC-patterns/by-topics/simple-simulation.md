@@ -103,3 +103,9 @@
 **Platform:** USACO  
 **Difficulty:** Bronze (US Open 2018)  
 **Tags:** Array, Matrix, Simulation, Set
+
+### USACO 593 - Mowing the Field
+**Link:** https://usaco.org/index.php?page=viewproblem2&cpid=593
+**Platform:** USACO
+**Difficulty:** Bronze (Jan 2016)
+**Tags:** Simulation, Hash Map, Implementation
