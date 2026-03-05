@@ -1,6 +1,8 @@
 import java.util.*;
 class Solution {
     public int minOperations(String s) {
+        // Time Complexity: O(N) to loop over each char in the string.
+        // Space Complexity: O(1) for a few variables.
         int startZero = 0;
         int startOne = 0;
         boolean need0 = true;
