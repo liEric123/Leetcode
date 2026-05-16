@@ -24,7 +24,7 @@ class Solution {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
     
-        System.out.println("Enter the array:");
+        System.out.println("Enter the array: ");
         String[] parts = sc.nextLine().split(" ");
         int[] nums = new int[parts.length];
     
@@ -35,7 +35,7 @@ class Solution {
         Solution sol = new Solution();
         boolean result = sol.isGood(nums);
     
-        System.out.println("Is good array:");
+        System.out.println("Is good array: ");
         System.out.println(result);
     
         sc.close();

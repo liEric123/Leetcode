@@ -24,7 +24,7 @@ class Solution {
         Solution sol = new Solution();
         boolean result = sol.canBeEqual(s1, s2);
 
-        System.out.println("Can be equal:");
+        System.out.println("Can be equal: ");
         System.out.println(result);
 
         sc.close();
