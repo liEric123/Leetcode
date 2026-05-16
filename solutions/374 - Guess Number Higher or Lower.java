@@ -32,16 +32,16 @@ class Solution extends GuessGame {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enter n:");
+        System.out.println("Enter n: ");
         int n = sc.nextInt();
 
-        System.out.println("Enter picked number:");
+        System.out.println("Enter picked number: ");
         GuessGame.picked = sc.nextInt();
 
         Solution sol = new Solution();
         int result = sol.guessNumber(n);
 
-        System.out.println("Guessed number:");
+        System.out.println("Guessed number: ");
         System.out.println(result);
 
         sc.close();

@@ -19,13 +19,13 @@ class Solution {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
     
-        System.out.println("Enter DNA string:");
+        System.out.println("Enter DNA string: ");
         String s = sc.nextLine();
     
         Solution sol = new Solution();
         List<String> result = sol.findRepeatedDnaSequences(s);
     
-        System.out.println("Repeated DNA sequences:");
+        System.out.println("Repeated DNA sequences: ");
         System.out.println(result);
     
         sc.close();

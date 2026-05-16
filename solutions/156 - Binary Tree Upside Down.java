@@ -60,7 +60,7 @@ class Solution {
         Solution sol = new Solution();
         TreeNode ans = sol.upsideDownBinaryTree(root);
     
-        System.out.println("Upside down tree:");
+        System.out.println("Upside down tree: ");
         Queue<TreeNode> q = new LinkedList<>();
         if (ans != null) q.offer(ans);
     
@@ -71,7 +71,7 @@ class Solution {
             if (curr.left != null) q.offer(curr.left);
             if (curr.right != null) q.offer(curr.right);
         }
-        
+
         System.out.println();
         sc.close();
     }

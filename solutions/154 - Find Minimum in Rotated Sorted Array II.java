@@ -1,22 +1,23 @@
 import java.util.*;
 class Solution {
-    private int helper(int [] nums, int left, int right) {
-        // Time Complexity: O(LogN) for binary search.
-        // Space Complexity: O(LogN) for recursion stack. Can be optimized with iterative solution.
-        if (left == right) {
-            return nums[left];
-        }
-        int middle = left + (right - left) / 2;
-        if (nums[middle] > nums[nums.length - 1]) {
-            return helper(nums, middle + 1, right);
-        }
-        else {
-            return helper(nums, left, middle);
-        }
-    }
-
     public int findMin(int[] nums) {
-        return helper(nums, 0, nums.length - 1);
+        // Time Complexity: O(LogN), but can be O(N) for all duplicates.
+        // Space Complexity: O(1) for a few variables.
+        int l = 0;
+        int r = nums.length - 1;
+        while (l < r) {
+            int m = l + (r - l) / 2;
+            if (nums[m] < nums[r]) {
+                r = m;
+            }
+            else if (nums[m] > nums[r]) {
+                l = m + 1;
+            }
+            else {
+                r--;
+            }
+        }
+        return nums[l];
     }
 
     public static void main(String[] args) {
