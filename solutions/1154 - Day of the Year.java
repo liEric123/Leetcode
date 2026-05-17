@@ -1,6 +1,8 @@
 import java.util.*;
 class Solution {
     public int dayOfYear(String date) {
+        // Time Complexity: O(1) but can reduce some constant overhead.
+        // Space Complexity: O(1) for a few constant variables.
         int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         String[] dates = date.split("-");
         int year = Integer.parseInt(dates[0]);
